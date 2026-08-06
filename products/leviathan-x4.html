@@ -95,7 +95,34 @@ padding:20px;
 
 }
 
+.gallery{
 
+display:flex;
+overflow-x:auto;
+scroll-snap-type:x mandatory;
+gap:15px;
+
+}
+
+
+.gallery img{
+
+flex:0 0 100%;
+width:100%;
+height:500px;
+object-fit:contain;
+background:#080808;
+border-radius:10px;
+scroll-snap-align:start;
+
+}
+
+
+.gallery::-webkit-scrollbar{
+
+display:none;
+
+}
 .product-image img{
 
 width:100%;
@@ -282,9 +309,17 @@ Giỏ hàng
 
 <div class="product-image">
 
+<div class="gallery">
 
 <img src="../leviathan-x4.jpg" alt="LEVIATHAN X4">
 
+<img src="../leviathan-1.jpg" alt="LEVIATHAN X4">
+
+<img src="../leviathan-2.jpg" alt="LEVIATHAN X4">
+
+<img src="../leviathan-3.jpg" alt="LEVIATHAN X4">
+
+</div>
 
 </div>
 
