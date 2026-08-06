@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>LEVIATHAN X4 | VTA SYSTEMS</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+
+body{
+
+background:#0b0b0b;
+color:white;
+
+}
+
+
+header{
+
+height:75px;
+background:#111;
+display:flex;
+justify-content:space-between;
+align-items:center;
+padding:0 50px;
+border-bottom:2px solid #222;
+
+}
+
+
+.logo{
+
+font-size:28px;
+font-weight:900;
+
+}
+
+.logo span{
+
+color:#ff6600;
+
+}
+
+
+nav a{
+
+color:white;
+text-decoration:none;
+margin-left:25px;
+font-weight:bold;
+
+}
+
+
+nav a:hover{
+
+color:#ff6600;
+
+}
+
+
+
+.product-detail{
+
+max-width:1200px;
+margin:60px auto;
+padding:20px;
+
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:50px;
+
+}
+
+
+
+.product-image{
+
+background:#080808;
+border-radius:15px;
+padding:20px;
+
+}
+
+
+.product-image img{
+
+width:100%;
+height:500px;
+object-fit:contain;
+
+}
+
+
+
+.product-info h1{
+
+font-size:45px;
+margin-bottom:15px;
+
+}
+
+
+.price{
+
+font-size:32px;
+color:#ff6600;
+font-weight:bold;
+margin:20px 0;
+
+}
+
+
+
+.description{
+
+color:#ccc;
+line-height:1.8;
+font-size:17px;
+
+}
+
+
+
+.spec{
+
+margin-top:30px;
+background:#151515;
+padding:20px;
+border-radius:12px;
+
+}
+
+
+
+.spec li{
+
+list-style:none;
+padding:10px;
+border-bottom:1px solid #222;
+color:#ddd;
+
+}
+
+
+
+.spec i{
+
+color:#ff6600;
+width:25px;
+
+}
+
+
+
+.add-cart{
+
+margin-top:30px;
+background:#ff6600;
+color:white;
+border:none;
+padding:15px 40px;
+font-size:18px;
+font-weight:bold;
+border-radius:8px;
+cursor:pointer;
+
+}
+
+
+
+.add-cart:hover{
+
+background:#ff8533;
+
+}
+
+
+
+.back{
+
+display:inline-block;
+margin-top:20px;
+color:#aaa;
+text-decoration:none;
+
+}
+
+
+
+footer{
+
+margin-top:50px;
+padding:30px;
+background:#080808;
+text-align:center;
+
+}
+
+
+
+@media(max-width:768px){
+
+.product-detail{
+
+grid-template-columns:1fr;
+
+}
+
+
+.product-info h1{
+
+font-size:35px;
+
+}
+
+.product-image img{
+
+height:300px;
+
+}
+
+}
+
+
+</style>
+
+</head>
+
+
+<body>
+
+
+<header>
+
+
+<div class="logo">
+
+VTA <span><i class="fa-solid fa-bolt"></i></span> SYSTEMS
+
+</div>
+
+
+<nav>
+
+<a href="../index.html">
+Trang chủ
+</a>
+
+
+<a href="../cart.html">
+
+<i class="fa-solid fa-cart-shopping"></i>
+
+Giỏ hàng
+
+</a>
+
+</nav>
+
+
+</header>
+
+
+
+<section class="product-detail">
+
+
+
+<div class="product-image">
+
+
+<img src="../leviathan-x4.jpg" alt="LEVIATHAN X4">
+
+
+</div>
+
+
+
+<div class="product-info">
+
+
+<h1>LEVIATHAN X4</h1>
+
+
+<div class="price">
+
+16.870.000đ
+
+</div>
+
+
+
+<p class="description">
+
+LEVIATHAN X4 là mẫu loa DIY công suất cao của VTA Systems.
+Thiết kế dành cho không gian lớn với âm bass mạnh mẽ,
+khả năng trình diễn uy lực và hệ thống xử lý âm thanh chuyên nghiệp.
+
+</p>
+
+
+
+<ul class="spec">
+
+
+<li>
+<i class="fa-solid fa-bolt"></i>
+Công suất: 1500W
+</li>
+
+
+<li>
+<i class="fa-solid fa-volume-high"></i>
+Cấu hình: 2 Sub 6.5 inch
+</li>
+
+
+<li>
+<i class="fa-solid fa-microchip"></i>
+Mạch khuếch đại: TPA3255
+</li>
+
+
+<li>
+<i class="fa-solid fa-lightbulb"></i>
+Hiệu ứng: LED ARGB
+</li>
+
+
+<li>
+<i class="fa-solid fa-ruler-combined"></i>
+Kích thước: 655 × 415 × 372 mm
+</li>
+
+
+</ul>
+
+
+
+<button class="add-cart"
+
+onclick="addToCart(
+'LEVIATHAN X4',
+16870000,
+'../leviathan-x4.jpg'
+)">
+
+🛒 Thêm vào giỏ hàng
+
+</button>
+
+
+
+<br>
+
+
+<a class="back" href="../index.html">
+
+← Quay lại sản phẩm
+
+</a>
+
+
+</div>
+
+
+
+</section>
+
+
+
+<footer>
+
+© 2026 VTA SYSTEMS
+
+</footer>
+
+
+
+
+<script>
+
+
+function addToCart(name,price,image){
+
+
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+
+
+let product=cart.find(item=>item.name===name);
+
+
+
+if(product){
+
+product.qty++;
+
+}
+
+else{
+
+
+cart.push({
+
+name:name,
+
+price:price,
+
+image:image,
+
+qty:1
+
+});
+
+
+}
+
+
+
+localStorage.setItem("cart",JSON.stringify(cart));
+
+
+alert("Đã thêm LEVIATHAN X4 vào giỏ hàng");
+
+
+}
+
+
+</script>
+
+
+
+</body>
+
+</html>
