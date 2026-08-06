@@ -476,8 +476,18 @@ footer {
           <li><i class="fa-solid fa-ruler-combined"></i> <strong>Kích thước:</strong> 320 × 175 × 190 mm</li>
         </ul>
       </div>
-      <a class="button" href="products/dravox-one.html">
+<a class="button" href="products/dravox-one.html">
 Xem Chi Tiết
+</a>
+
+<button class="button"
+onclick="addToCart(
+'DRAVOX One',
+4990000,
+'dravox-one.png'
+)">
+🛒 Thêm vào giỏ
+</button>
 </a>
     </div>
 
@@ -499,9 +509,18 @@ Xem Chi Tiết
           <li><i class="fa-solid fa-ruler-combined"></i> <strong>Kích thước:</strong> 655 × 415 × 372 mm</li>
         </ul>
       </div>
-     <a class="button" href="products/leviathan-x4.html">
+<a class="button" href="products/leviathan-x4.html">
 Xem Chi Tiết
 </a>
+
+<button class="button"
+onclick="addToCart(
+'LEVIATHAN X4',
+15900000,
+'leviathan-x4.jpg'
+)">
+🛒 Thêm vào giỏ
+</button>
     </div>
 
     <div class="product-card">
@@ -519,9 +538,18 @@ Xem Chi Tiết
         <div class="tagline">Thiết Kế Tối Giản & Âm Thanh Chi Tiết</div>
         <p>Kiểu dáng để bàn bo góc hiện đại, cấu hình đa củ loa cho âm thanh chân thực, nhỏ gọn phù hợp mọi không gian.</p>
       </div>
-      <a class="button" href="products/vortex-x3.html">
+<a class="button" href="products/vortex-x3.html">
 Xem Thông Số
 </a>
+
+<button class="button"
+onclick="addToCart(
+'VORTEX X3',
+6990000,
+'vortex-x3.jpg'
+)">
+🛒 Thêm vào giỏ
+</button>
     </div>
 
   </div>
@@ -574,6 +602,57 @@ Xem Thông Số
     <p>&copy; 2026 VTA Systems. Tất cả quyền được bảo lưu.</p>
   </div>
 </footer>
+
+<script>
+
+function addToCart(name,price,image){
+
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+
+const product=cart.find(item=>item.name===name);
+
+if(product){
+
+product.qty++;
+
+}else{
+
+cart.push({
+name:name,
+price:price,
+image:image,
+qty:1
+});
+
+}
+
+localStorage.setItem("cart",JSON.stringify(cart));
+
+updateCart();
+
+alert("Đã thêm vào giỏ hàng!");
+
+}
+
+function updateCart(){
+
+let cart=JSON.parse(localStorage.getItem("cart"))||[];
+
+let count=0;
+
+cart.forEach(item=>{
+
+count+=item.qty;
+
+});
+
+document.getElementById("cart-count").innerHTML=count;
+
+}
+
+updateCart();
+
+</script>
 
 </body>
 </html>
