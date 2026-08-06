@@ -311,6 +311,15 @@ Giỏ hàng
 
 </div>
 
+<input type="text" id="customerName" placeholder="Họ và tên"
+style="width:100%;padding:12px;margin:10px 0;">
+
+<input type="email" id="customerEmail" placeholder="Email"
+style="width:100%;padding:12px;margin:10px 0;">
+
+<input type="text" id="customerPhone" placeholder="Số điện thoại"
+style="width:100%;padding:12px;margin:10px 0;">
+  
 <div class="buttons">
 
 <a href="index.html" class="back">
@@ -319,10 +328,8 @@ Tiếp tục mua
 
 </a>
 
-<button class="checkout">
-
+<button class="checkout" onclick="checkout()">
 Tiến hành thanh toán
-
 </button>
 
 </div>
@@ -332,13 +339,13 @@ Tiến hành thanh toán
 </div>
 
 <footer>
-
+  
 © 2026 VTA SYSTEMS
 
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="cart.js"></script>
 
 </body>
-
 </html>
