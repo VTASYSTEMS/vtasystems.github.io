@@ -102,7 +102,74 @@ nav a{
 nav a:hover{
   color: #ff6600;
 }
+/* MENU DANH MỤC LOA */
+.dropdown{
+  position:relative;
+  display:inline-block;
+}
 
+.dropdown-btn{
+  color:white;
+  text-decoration:none;
+  margin-left:30px;
+  font-weight:600;
+  cursor:pointer;
+}
+
+.dropdown-btn:hover{
+  color:#ff6600;
+}
+
+
+.dropdown-content{
+
+  display:none;
+  position:absolute;
+  top:35px;
+  left:20px;
+
+  background:#141414;
+  min-width:220px;
+
+  border:1px solid #333;
+  border-radius:10px;
+
+  padding:15px;
+
+  z-index:999;
+
+}
+
+
+.dropdown:hover .dropdown-content{
+
+  display:block;
+
+}
+
+
+.dropdown-content a{
+
+  display:block;
+  color:#ddd;
+  text-decoration:none;
+
+  padding:8px 10px;
+
+  margin:0;
+
+  font-size:15px;
+
+}
+
+
+.dropdown-content a:hover{
+
+  color:#ff6600;
+  background:#222;
+
+}
+  
 /* HERO SECTION */
 .hero{
   padding: 80px 20px 50px;
@@ -423,11 +490,60 @@ footer {
 <header>
   <div class="logo">VTA <span><i class="fa-solid fa-bolt"></i></span> SYSTEMS</div>
 
-  <nav>
-    <a href="#home">Trang chủ</a>
-    <a href="#products">Sản phẩm</a>
-    <a href="#about">Về VTA</a>
-    <a href="#contact">Liên hệ</a>
+<nav>
+
+<a href="#home">Trang chủ</a>
+
+
+<!-- DANH MỤC LOA -->
+
+<div class="dropdown">
+
+<a class="dropdown-btn">
+🎵 DÒNG LOA
+</a>
+
+
+<div class="dropdown-content">
+
+
+<a href="#products">
+DRAVOX
+</a>
+
+<a href="products/dravox.html">
+└ DRAVOX One
+</a>
+
+
+
+<a href="#products">
+LEVIATHAN
+</a>
+
+<a href="products/leviathan-x4.html">
+└ LEVIATHAN X4
+</a>
+
+
+
+<a href="#products">
+VORTEX
+</a>
+
+<a href="products/vortex.html">
+└ VORTEX X3
+</a>
+
+
+</div>
+
+</div>
+
+
+<a href="#about">Về VTA</a>
+
+<a href="#contact">Liên hệ</a>
 
     <a href="cart.html" class="cart-icon">
       <i class="fa-solid fa-cart-shopping"></i>
