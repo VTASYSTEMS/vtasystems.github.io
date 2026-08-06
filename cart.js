@@ -81,8 +81,8 @@ function renderCart(){
 
     });
 
-    subtotal.innerHTML=formatPrice(sum);
-    total.innerHTML=formatPrice(sum);
+    subtotal.innerHTML = formatPrice(sum);
+    total.innerHTML = formatPrice(sum);
 
 }
 
@@ -124,19 +124,26 @@ function removeItem(index){
 
 }
 
-renderCart();
+// Hiện form thanh toán
+function showCheckout(){
 
+    document.getElementById("checkoutForm").style.display="block";
+
+}
+
+// Khởi tạo EmailJS
 emailjs.init({
     publicKey: "EbcJSB6nRSfN3lFRV"
 });
 
+// Gửi đơn hàng
 function checkout(){
 
-    const name=document.getElementById("customerName").value;
-    const email=document.getElementById("customerEmail").value;
-    const phone=document.getElementById("customerPhone").value;
+    const name=document.getElementById("customerName").value.trim();
+    const email=document.getElementById("customerEmail").value.trim();
+    const phone=document.getElementById("customerPhone").value.trim();
 
-    if(name===""||email===""){
+    if(name==="" || email===""){
         alert("Vui lòng nhập đầy đủ thông tin.");
         return;
     }
@@ -151,13 +158,13 @@ function checkout(){
         "service_h9czuwm",
         "template_smaunw1",
         {
-            name:name,
-            email:email,
-            phone:phone,
-            order:order,
-            total:total.innerText
+            name: name,
+            email: email,
+            phone: phone,
+            order: order,
+            total: total.innerText
         }
-    ).then(()=>{
+    ).then(function(){
 
         alert("Đặt hàng thành công!");
 
@@ -165,7 +172,7 @@ function checkout(){
 
         location.reload();
 
-    }).catch(error=>{
+    }).catch(function(error){
 
         console.log(error);
 
@@ -174,3 +181,5 @@ function checkout(){
     });
 
 }
+
+renderCart();
