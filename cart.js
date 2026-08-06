@@ -151,7 +151,7 @@ function checkout(){
     let order="";
 
     cart.forEach(item=>{
-        order += ${item.name} x${item.qty}\n;
+       order += item.name + " x" + item.qty + "\n";
     });
 
     emailjs.send(
@@ -183,3 +183,7 @@ function checkout(){
 }
 
 renderCart();
+
+function showCheckout(){
+    document.getElementById("checkoutForm").style.display="block";
+}
