@@ -310,7 +310,9 @@ Giỏ hàng
 <strong id="total">0đ</strong>
 
 </div>
-
+  
+<div id="checkoutForm" style="display:none;margin-bottom:20px;">
+  
 <input type="text" id="customerName" placeholder="Họ và tên"
 style="width:100%;padding:12px;margin:10px 0;">
 
@@ -319,6 +321,12 @@ style="width:100%;padding:12px;margin:10px 0;">
 
 <input type="text" id="customerPhone" placeholder="Số điện thoại"
 style="width:100%;padding:12px;margin:10px 0;">
+
+  <button onclick="checkout()" class="checkout">
+Xác nhận đặt hàng
+</button>
+
+</div>
   
 <div class="buttons">
 
@@ -328,7 +336,7 @@ Tiếp tục mua
 
 </a>
 
-<button class="checkout" onclick="checkout()">
+<button class="checkout" onclick="showCheckout()">
 Tiến hành thanh toán
 </button>
 
