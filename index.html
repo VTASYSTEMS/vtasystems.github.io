@@ -465,7 +465,96 @@ footer {
 }
 @media (max-width: 768px) {
   header { padding: 0 20px; }
-  nav { display: none; }
+  .menu-toggle{
+
+display:none;
+font-size:28px;
+color:white;
+cursor:pointer;
+
+}
+
+
+@media (max-width:768px){
+
+
+header{
+
+padding:0 20px;
+
+}
+
+
+.menu-toggle{
+
+display:block;
+
+}
+
+
+nav{
+
+display:none;
+position:absolute;
+top:75px;
+left:0;
+width:100%;
+background:#111;
+padding:20px;
+border-top:1px solid #222;
+
+}
+
+
+nav.active{
+
+display:block;
+
+}
+
+
+nav a{
+
+display:block;
+margin:15px 0;
+font-size:16px;
+
+}
+
+
+/* menu dòng loa */
+
+.dropdown{
+
+display:block;
+
+}
+
+
+.dropdown-content{
+
+position:static;
+margin-top:10px;
+
+}
+
+
+.hero h1{
+
+font-size:36px;
+
+}
+
+
+.ticker-item{
+
+font-size:13px;
+padding:0 15px;
+
+}
+
+
+}
   .hero h1 { font-size: 36px; }
   .ticker-item { font-size: 13px; padding: 0 15px; }
 }
@@ -488,7 +577,16 @@ footer {
 </div>
 
 <header>
-  <div class="logo">VTA <span><i class="fa-solid fa-bolt"></i></span> SYSTEMS</div>
+
+<div class="logo">
+VTA <span><i class="fa-solid fa-bolt"></i></span> SYSTEMS
+</div>
+
+
+<div class="menu-toggle">
+<i class="fa-solid fa-bars"></i>
+</div>
+
 
 <nav>
 
@@ -749,5 +847,22 @@ updateCart();
 
 </script>
 
+<script>
+
+
+const menuToggle=document.querySelector(".menu-toggle");
+
+const nav=document.querySelector("nav");
+
+
+menuToggle.onclick=function(){
+
+nav.classList.toggle("active");
+
+}
+
+
+</script>
+  
 </body>
 </html>
