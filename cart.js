@@ -125,3 +125,52 @@ function removeItem(index){
 }
 
 renderCart();
+
+emailjs.init({
+    publicKey: "EbcJSB6nRSfN3lFRV"
+});
+
+function checkout(){
+
+    const name=document.getElementById("customerName").value;
+    const email=document.getElementById("customerEmail").value;
+    const phone=document.getElementById("customerPhone").value;
+
+    if(name===""||email===""){
+        alert("Vui lòng nhập đầy đủ thông tin.");
+        return;
+    }
+
+    let order="";
+
+    cart.forEach(item=>{
+        order += ${item.name} x${item.qty}\n;
+    });
+
+    emailjs.send(
+        "service_h9czuwm",
+        "template_smaunw1",
+        {
+            name:name,
+            email:email,
+            phone:phone,
+            order:order,
+            total:total.innerText
+        }
+    ).then(()=>{
+
+        alert("Đặt hàng thành công!");
+
+        localStorage.removeItem("cart");
+
+        location.reload();
+
+    }).catch(error=>{
+
+        console.log(error);
+
+        alert("Không gửi được email.");
+
+    });
+
+}
