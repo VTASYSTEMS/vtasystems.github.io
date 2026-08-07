@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Đăng ký | VTA SYSTEMS</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#0b0b0b;
+color:#fff;
+min-height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+padding:30px;
+}
+
+.register-box{
+
+width:500px;
+max-width:95%;
+background:#151515;
+padding:40px;
+border-radius:15px;
+border:1px solid #222;
+
+}
+
+.logo{
+
+text-align:center;
+font-size:34px;
+font-weight:bold;
+margin-bottom:10px;
+
+}
+
+.logo span{
+
+color:#ff6600;
+
+}
+
+.subtitle{
+
+text-align:center;
+color:#bbb;
+margin-bottom:30px;
+
+}
+
+.row{
+
+display:flex;
+gap:15px;
+
+}
+
+.input-group{
+
+margin-bottom:18px;
+flex:1;
+
+}
+
+.input-group label{
+
+display:block;
+margin-bottom:8px;
+font-weight:bold;
+
+}
+
+.input-group input{
+
+width:100%;
+padding:14px;
+background:#222;
+border:none;
+border-radius:8px;
+color:white;
+font-size:15px;
+
+}
+
+.input-group input:focus{
+
+outline:2px solid #ff6600;
+
+}
+
+.checkbox{
+
+margin:20px 0;
+
+}
+
+.checkbox label{
+
+cursor:pointer;
+
+}
+
+button{
+
+width:100%;
+padding:16px;
+background:#ff6600;
+border:none;
+border-radius:8px;
+color:white;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+transition:.3s;
+
+}
+
+button:hover{
+
+background:#ff8533;
+
+}
+
+.links{
+
+margin-top:25px;
+text-align:center;
+
+}
+
+.links a{
+
+color:#ff6600;
+text-decoration:none;
+
+}
+
+.links a:hover{
+
+text-decoration:underline;
+
+}
+
+.reward{
+
+margin-top:25px;
+padding:18px;
+background:#222;
+border-left:4px solid #ff6600;
+border-radius:8px;
+line-height:1.7;
+
+}
+
+.reward h3{
+
+color:#ff6600;
+margin-bottom:10px;
+
+}
+
+@media(max-width:600px){
+
+.row{
+
+flex-direction:column;
+
+}
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="register-box">
+
+<div class="logo">
+
+VTA <span><i class="fa-solid fa-bolt"></i></span> SYSTEMS
+
+</div>
+
+<p class="subtitle">
+
+Đăng ký thành viên để nhận nhiều ưu đãi.
+
+</p>
+
+<div class="row">
+
+<div class="input-group">
+
+<label>Tên</label>
+
+<input
+type="text"
+id="firstName"
+placeholder="Tên">
+
+</div>
+
+<div class="input-group">
+
+<label>Họ</label>
+
+<input
+type="text"
+id="lastName"
+placeholder="Họ">
+
+</div>
+
+</div>
+
+<div class="input-group">
+
+<label>Email</label>
+
+<input
+type="email"
+id="email"
+placeholder="Email">
+
+</div>
+
+<div class="input-group">
+
+<label>Số điện thoại</label>
+
+<input
+type="tel"
+id="phone"
+placeholder="Số điện thoại">
+
+</div>
+
+<div class="input-group">
+
+<label>Mật khẩu</label>
+
+<input
+type="password"
+id="password"
+placeholder="Mật khẩu">
+
+</div>
+
+<div class="input-group">
+
+<label>Xác nhận mật khẩu</label>
+
+<input
+type="password"
+id="confirmPassword"
+placeholder="Nhập lại mật khẩu">
+
+</div>
+
+<div class="checkbox">
+
+<label>
+
+<input type="checkbox" id="agree">
+
+Tôi đồng ý với điều khoản sử dụng của VTA SYSTEMS.
+
+</label>
+
+</div>
+
+<button onclick="register()">
+
+<i class="fa-solid fa-user-plus"></i>
+
+ĐĂNG KÝ
+
+</button>
+
+<div class="reward">
+
+<h3>🎁 Quà tặng thành viên mới</h3>
+
+✔ Tặng ngay 01 mã miễn phí vận chuyển.<br>
+
+✔ Có hiệu lực vĩnh viễn cho đến khi sử dụng.<br>
+
+✔ Sau khi dùng sẽ tự động bị xóa khỏi tài khoản.
+
+</div>
+
+<div class="links">
+
+Đã có tài khoản?
+
+<a href="login.html">
+
+Đăng nhập
+
+</a>
+
+</div>
+
+</div>
+
+<script>
+
+function register(){
+
+const pw=document.getElementById("password").value;
+
+const cpw=document.getElementById("confirmPassword").value;
+
+if(pw!==cpw){
+
+alert("Mật khẩu xác nhận không khớp.");
+
+return;
+
+}
+
+if(!document.getElementById("agree").checked){
+
+alert("Bạn cần đồng ý điều khoản.");
+
+return;
+
+}
+
+alert("Bước tiếp theo sẽ kết nối Firebase để đăng ký tài khoản và tự động tặng mã miễn phí vận chuyển.");
+
+}
+
+</script>
+
+</body>
+</html>
