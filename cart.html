@@ -299,7 +299,7 @@ Giỏ hàng
 
 <span>Vận chuyển</span>
 
-<strong>Miễn phí</strong>
+<strong>Sẽ tính ở bước thanh toán</strong>
 
 </div>
 
@@ -311,25 +311,6 @@ Giỏ hàng
 
 </div>
   
-<div id="checkoutForm" style="display:none;margin-bottom:20px;">
-  
-<input type="text" id="customerName" placeholder="Họ và tên"
-style="width:100%;padding:12px;margin:10px 0;">
-
-<input type="email" id="customerEmail" placeholder="Email"
-style="width:100%;padding:12px;margin:10px 0;">
-
-<input type="text" id="customerPhone" placeholder="Số điện thoại"
-style="width:100%;padding:12px;margin:10px 0;">
-  
- <div class="checkout-area">
-
-    <button class="checkout" onclick="checkout()">
-        XÁC NHẬN THANH TOÁN
-    </button>
-
-</div>
-  
 <div class="buttons">
 
 <a href="index.html" class="back">
@@ -338,8 +319,10 @@ Tiếp tục mua
 
 </a>
 
-<button class="checkout" onclick="showCheckout()">
+<button class="checkout" onclick="goCheckout()">
+
 Tiến hành thanh toán
+
 </button>
 
 </div>
@@ -357,5 +340,24 @@ Tiến hành thanh toán
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
 <script src="cart.js"></script>
 
+<script>
+  
+function goCheckout(){
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+if(cart.length===0){
+
+alert("Giỏ hàng đang trống!");
+
+return;
+
+}
+
+window.location.href="checkout.html";
+
+}
+</script>
+  
 </body>
 </html>
