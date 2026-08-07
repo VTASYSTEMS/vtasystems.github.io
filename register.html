@@ -330,7 +330,11 @@ import { ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-da
 document.getElementById("registerForm").addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const username = document.getElementById("username").value.trim();
+    const firstName=document.getElementById("firstName").value.trim();
+
+    const lastName=document.getElementById("lastName").value.trim();
+
+    const username=lastName+" "+firstName;
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
 
