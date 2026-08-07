@@ -32,7 +32,7 @@ body::before{
 content:"";
 position:fixed;
 inset:0;
-background:rgba(0,0,0,.45);
+background:rgba(0,0,0,.18);
 z-index:-1;
 }
   
@@ -57,7 +57,7 @@ max-width:1200px;
 margin:40px auto;
 padding:35px;
 
-background:rgba(18,18,18,.92);
+background:rgba(18,18,18,.25);
 
 backdrop-filter:blur(8px);
 -webkit-backdrop-filter:blur(8px);
@@ -178,6 +178,29 @@ grid-template-columns:1fr 1.2fr;
 gap:35px;
 }
 
+/* THÊM NGAY ĐÂY */
+
+.order-box{
+background:rgba(20,20,20,.45);
+backdrop-filter:blur(14px);
+-webkit-backdrop-filter:blur(14px);
+border:1px solid rgba(255,255,255,.08);
+border-radius:18px;
+padding:30px;
+box-shadow:0 8px 35px rgba(0,0,0,.45);
+height:fit-content;
+}
+
+.shipping{
+background:rgba(20,20,20,.45);
+backdrop-filter:blur(14px);
+-webkit-backdrop-filter:blur(14px);
+border:1px solid rgba(255,255,255,.08);
+border-radius:18px;
+padding:30px;
+box-shadow:0 8px 35px rgba(0,0,0,.45);
+}
+
 .order-item{
 display:flex;
 justify-content:space-between;
@@ -207,39 +230,11 @@ flex-direction:column;
 }
 
 .order-box{
-    order:1;
-
-    background:rgba(20,20,20,.45);
-
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-
-    border:1px solid rgba(255,255,255,.08);
-
-    border-radius:18px;
-
-    padding:30px;
-
-    box-shadow:0 8px 35px rgba(0,0,0,.45);
-
-    height:fit-content;
+order:1;
 }
 
 .shipping{
-    order:2;
-
-    background:rgba(20,20,20,.45);
-
-    backdrop-filter:blur(14px);
-    -webkit-backdrop-filter:blur(14px);
-
-    border:1px solid rgba(255,255,255,.08);
-
-    border-radius:18px;
-
-    padding:30px;
-
-    box-shadow:0 8px 35px rgba(0,0,0,.45);
+order:2;
 }
   
 
