@@ -236,7 +236,7 @@ total.toLocaleString("vi-VN")+"đ";
 
 function placeOrder(){
 
-let name=document.getElementById("name").value.trim();
+let firstName=document.getElementById("firstName").value.trim();
 
 let phone=document.getElementById("phone").value.trim();
 
@@ -244,9 +244,21 @@ let email=document.getElementById("email").value.trim();
 
 let address=document.getElementById("address").value.trim();
 
-if(name==""||phone==""||email==""||address==""){
+let district=document.getElementById("district").value.trim();
 
-alert("Vui lòng nhập đầy đủ thông tin!");
+let city=document.getElementById("city").value.trim();
+
+if(
+lastName==""||
+firstName==""||
+phone==""||
+email==""||
+address==""||
+district==""||
+city==""
+){
+
+alert("Vui lòng nhập đầy đủ thông tin giao hàng!");
 
 return;
 
