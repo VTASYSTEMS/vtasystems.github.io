@@ -178,14 +178,6 @@ grid-template-columns:1fr 1.2fr;
 gap:35px;
 }
 
-.order-box{
-background:#111;
-padding:25px;
-border-radius:12px;
-border:1px solid #222;
-height:fit-content;
-}
-
 .order-item{
 display:flex;
 justify-content:space-between;
@@ -429,12 +421,6 @@ total.toLocaleString("vi-VN")+"đ";
 
 document.getElementById("grandTotal").innerHTML=
 total.toLocaleString("vi-VN")+"đ";
-  
-cart.forEach(item=>{
-
-total += item.price * item.quantity;
-
-});
 
 document.getElementById("totalPrice").innerHTML =
 total.toLocaleString("vi-VN")+"đ";
