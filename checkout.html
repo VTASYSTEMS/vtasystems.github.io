@@ -86,9 +86,10 @@ select{
 width:100%;
 padding:14px;
 margin:12px 0;
-background:#0f0f0f;
+background:rgba(255,255,255,.06);
+backdrop-filter:blur(6px);
 color:white;
-border:1px solid #333;
+border:1px solid rgba(255,255,255,.08);
 border-radius:8px;
 font-size:16px;
 
@@ -101,13 +102,15 @@ height:100px;
 
 .total{
 
-background:#111;
+background:rgba(255,102,0,.12);
+backdrop-filter:blur(8px);
+border:1px solid rgba(255,102,0,.35);  
 padding:18px;
 border-radius:10px;
 margin:20px 0;
 font-size:22px;
 font-weight:bold;
-color:#ff6600;
+color:#ff8c32;
 text-align:center;
 
 }
@@ -212,12 +215,41 @@ flex-direction:column;
 }
 
 .order-box{
-order:1;
+    order:1;
+
+    background:rgba(20,20,20,.45);
+
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:30px;
+
+    box-shadow:0 8px 35px rgba(0,0,0,.45);
+
+    height:fit-content;
 }
 
 .shipping{
-order:2;
+    order:2;
+
+    background:rgba(20,20,20,.45);
+
+    backdrop-filter:blur(14px);
+    -webkit-backdrop-filter:blur(14px);
+
+    border:1px solid rgba(255,255,255,.08);
+
+    border-radius:18px;
+
+    padding:30px;
+
+    box-shadow:0 8px 35px rgba(0,0,0,.45);
 }
+  
 
 }
   
@@ -230,6 +262,17 @@ order:2;
 
 }
 
+.shipping:hover,
+.order-box:hover{
+
+border:1px solid rgba(255,102,0,.35);
+
+box-shadow:0 0 35px rgba(255,102,0,.18);
+
+transition:.35s;
+
+}
+  
 </style>
 
 </head>
