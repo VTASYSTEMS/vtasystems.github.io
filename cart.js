@@ -7,7 +7,7 @@ const total = document.getElementById("total");
 function formatPrice(price){
     return price.toLocaleString("vi-VN") + "đ";
 }
-
+ 
 function saveCart(){
     localStorage.setItem("cart", JSON.stringify(cart));
 }
