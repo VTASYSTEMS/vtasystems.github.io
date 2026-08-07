@@ -213,7 +213,8 @@ VTA <span><i class="fa-solid fa-bolt"></i></span> SYSTEMS
 <input
 type="text"
 id="firstName"
-placeholder="Tên">
+placeholder="Tên"
+required>
 
 </div>
 
@@ -224,8 +225,9 @@ placeholder="Tên">
 <input
 type="text"
 id="lastName"
-placeholder="Họ">
-
+placeholder="Họ"
+required>
+    
 </div>
 
 </div>
@@ -237,8 +239,9 @@ placeholder="Họ">
 <input
 type="email"
 id="email"
-placeholder="Email">
-
+placeholder="Email"
+required>
+    
 </div>
 
 <div class="input-group">
@@ -248,8 +251,9 @@ placeholder="Email">
 <input
 type="tel"
 id="phone"
-placeholder="Số điện thoại">
-
+placeholder="Số điện thoại"
+required>
+    
 </div>
 
 <div class="input-group">
@@ -259,8 +263,9 @@ placeholder="Số điện thoại">
 <input
 type="password"
 id="password"
-placeholder="Mật khẩu">
-
+placeholder="Mật khẩu"
+required>
+    
 </div>
 
 <div class="input-group">
@@ -270,8 +275,9 @@ placeholder="Mật khẩu">
 <input
 type="password"
 id="confirmPassword"
-placeholder="Nhập lại mật khẩu">
-
+placeholder="Nhập lại mật khẩu"
+required>
+    
 </div>
 
 <div class="checkbox">
@@ -286,7 +292,7 @@ Tôi đồng ý với điều khoản sử dụng của VTA SYSTEMS.
 
 </div>
 
-<button onclick="register()">
+<button type="submit">
 
 <i class="fa-solid fa-user-plus"></i>
 
@@ -337,14 +343,29 @@ const lastName=document.getElementById("lastName").value.trim();
 const username=lastName+" "+firstName;
     const email = document.getElementById("email").value.trim();
     const password = document.getElementById("password").value;
+const confirmPassword = document.getElementById("confirmPassword").value;
+const phone = document.getElementById("phone").value.trim();
 
+if(password !== confirmPassword){
+    alert("Mật khẩu xác nhận không khớp.");
+    return;
+}
+
+if(!document.getElementById("agree").checked){
+    alert("Bạn cần đồng ý điều khoản.");
+    return;
+}
     try {
         const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-        await set(ref(database, "users/" + userCredential.user.uid), {
-            username: username,
-            email: email
-        });
+       await set(ref(database, "users/" + userCredential.user.uid), {
+    username: username,
+    email: email,
+    phone: phone,
+    firstName: firstName,
+    lastName: lastName,
+    createdAt: new Date().toISOString()
+});
 
         alert("Đăng ký thành công!");
 
