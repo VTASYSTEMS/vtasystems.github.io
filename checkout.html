@@ -8,6 +8,11 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
 <style>
 
 *{
@@ -114,6 +119,26 @@ text-decoration:none;
 
 }
 
+/* THÊM NGAY DƯỚI ĐÂY */
+
+.privacy-note{
+    font-family:'Montserrat',sans-serif;
+    font-size:14px;
+    font-weight:300;
+    color:#9a9a9a;
+    line-height:1.8;
+    margin:30px 0;
+}
+
+@media(max-width:768px){
+
+.privacy-note{
+    font-size:13px;
+    line-height:1.7;
+}
+
+}
+
 </style>
 
 </head>
@@ -128,6 +153,10 @@ VTA <span> SYSTEMS</span>
 
 <div class="container">
 
+<div class="checkout-grid">
+
+<div class="shipping">
+  
 <h1>THÔNG TIN GIAO HÀNG</h1>
 
 <input id="name" type="text" placeholder="Họ và tên">
@@ -142,6 +171,12 @@ VTA <span> SYSTEMS</span>
 
 <textarea id="note" placeholder="Ghi chú (không bắt buộc)"></textarea>
 
+<p class="privacy-note">
+Thông tin cá nhân của bạn sẽ được sử dụng để xử lý đơn hàng, tăng trải nghiệm sử dụng website, và cho các mục đích cụ thể khác đã được mô tả trong Chính sách bảo mật.
+</p>
+
+<input id="coupon" type="text" placeholder="Mã ưu đãi">
+
 <select id="payment">
 
 <option>Thanh toán khi nhận hàng (COD)</option>
@@ -149,7 +184,7 @@ VTA <span> SYSTEMS</span>
 <option>Chuyển khoản ngân hàng</option>
 
 </select>
-
+  
 <div class="total">
 
 Tổng thanh toán:
