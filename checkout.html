@@ -51,6 +51,10 @@ border-radius:15px;
 border:1px solid #222;
 }
 
+.checkout-grid{
+display:block;
+}
+  
 h1{
 text-align:center;
 margin-bottom:30px;
@@ -119,7 +123,14 @@ text-decoration:none;
 
 }
 
-/* THÊM NGAY DƯỚI ĐÂY */
+.row{
+display:flex;
+gap:15px;
+}
+
+.row input{
+flex:1;
+}
 
 .privacy-note{
     font-family:'Montserrat',sans-serif;
@@ -185,9 +196,6 @@ Thông tin cá nhân của bạn sẽ được sử dụng để xử lý đơn 
 
 <input id="coupon" type="text" placeholder="Mã ưu đãi">
 
-
-  <input id="coupon" type="text" placeholder="Mã ưu đãi">
-
 <select id="payment">
 <option>Thanh toán khi nhận hàng (COD)</option>
 <option>Chuyển khoản ngân hàng</option>
@@ -196,7 +204,7 @@ Thông tin cá nhân của bạn sẽ được sử dụng để xử lý đơn 
 <label style="display:flex;align-items:center;gap:10px;margin:25px 0;">
 <input type="checkbox" id="agree">
 Tôi đồng ý với điều khoản và chính sách bảo mật.
-</la
+</label>
   
 <div class="total">
 
@@ -236,6 +244,8 @@ total.toLocaleString("vi-VN")+"đ";
 
 function placeOrder(){
 
+let lastName = document.getElementById("lastName").value.trim();
+  
 let firstName=document.getElementById("firstName").value.trim();
 
 let phone=document.getElementById("phone").value.trim();
