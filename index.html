@@ -590,17 +590,27 @@ VTA <span><i class="fa-solid fa-bolt"></i></span> SYSTEMS
 
 <div class="dropdown">
 
-<a class="dropdown-btn">
+<a class="dropdown-btn" id="accountButton">
 👤 TÀI KHOẢN
 </a>
 
 <div class="dropdown-content">
 
-<a href="login.html">🔑 Đăng nhập</a>
+<a href="login.html" id="menuLogin">
+🔑 Đăng nhập
+</a>
 
-<a href="register.html">📝 Đăng ký</a>
+<a href="register.html" id="menuRegister">
+📝 Đăng ký
+</a>
 
-<a href="account.html">👤 Tài khoản</a>
+<a href="account.html" id="menuAccount" style="display:none;">
+👤 Tài khoản
+</a>
+
+<a href="#" id="menuLogout" style="display:none;">
+🚪 Đăng xuất
+</a>
 
 </div>
 
@@ -844,6 +854,85 @@ nav.classList.toggle("active");
 
 }
 
+
+</script>
+
+<script type="module">
+
+import { auth, database } from "./firebase.js";
+
+import {
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    ref,
+    get
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const login = document.getElementById("menuLogin");
+const register = document.getElementById("menuRegister");
+const account = document.getElementById("menuAccount");
+const logout = document.getElementById("menuLogout");
+const accountButton = document.getElementById("accountButton");
+
+onAuthStateChanged(auth, async (user) => {
+
+    if (user) {
+
+        login.style.display = "none";
+        register.style.display = "none";
+
+        account.style.display = "block";
+        logout.style.display = "block";
+
+        let userName = user.email;
+
+        try {
+
+            const snapshot = await get(ref(database, "users/" + user.uid));
+
+            if (snapshot.exists()) {
+
+                const data = snapshot.val();
+
+                userName =
+                    data.username ||
+                    `${data.lastName ?? ""} ${data.firstName ?? ""}`.trim() ||
+                    user.email;
+
+            }
+
+        } catch (error) {
+            console.error(error);
+        }
+
+        accountButton.innerHTML = `👋 Xin chào, ${userName}`;
+
+    } else {
+
+        login.style.display = "block";
+        register.style.display = "block";
+
+        account.style.display = "none";
+        logout.style.display = "none";
+
+        accountButton.innerHTML = "👤 TÀI KHOẢN";
+
+    }
+
+});
+
+logout.onclick = async (e) => {
+
+    e.preventDefault();
+
+    await signOut(auth);
+
+    window.location.reload();
+
+};
 
 </script>
   
