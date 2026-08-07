@@ -396,6 +396,7 @@ import { ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-d
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 console.log(cart);
+console.log(total);
   
 if(cart.length===0){
 
@@ -408,9 +409,13 @@ window.location.href="cart.html";
   
 let total = 0;
 
-let html="";
+let html = "";
 
 cart.forEach(item => {
+
+    console.log("Item:", item);
+    console.log("Price:", item.price);
+    console.log("Qty:", item.qty);
 
     total += item.price * item.qty;
 
@@ -435,6 +440,7 @@ cart.forEach(item => {
 
     </div>
     `;
+
 });
   
 document.getElementById("orderItems").innerHTML=html;
