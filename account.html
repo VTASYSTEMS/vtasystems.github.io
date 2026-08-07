@@ -258,5 +258,68 @@ Bạn hiện chưa có mã ưu đãi.
 
 </div>
 
+<script type="module">
+
+import { auth, database } from "./firebase.js";
+
+import {
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    ref,
+    get
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+onAuthStateChanged(auth, async (user) => {
+
+    if (!user) {
+        window.location.href = "login.html";
+        return;
+    }
+
+    try {
+
+        const snapshot = await get(ref(database, "users/" + user.uid));
+
+        if (snapshot.exists()) {
+
+            const data = snapshot.val();
+
+            document.getElementById("name").textContent =
+                data.username || (data.lastName + " " + data.firstName);
+
+            document.getElementById("email").textContent =
+                data.email || user.email;
+
+            document.getElementById("phone").textContent =
+                data.phone || "Chưa cập nhật";
+
+        }
+
+    } catch (error) {
+
+        console.error(error);
+
+    }
+
+});
+
+document.querySelector(".logout").addEventListener("click", async (e) => {
+
+    e.preventDefault();
+
+    await signOut(auth);
+
+    alert("Đã đăng xuất!");
+
+    window.location.href = "login.html";
+
+});
+
+</script>
+
+  
 </body>
 </html>
