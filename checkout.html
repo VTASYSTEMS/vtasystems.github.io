@@ -159,7 +159,13 @@ VTA <span> SYSTEMS</span>
   
 <h1>THÔNG TIN GIAO HÀNG</h1>
 
-<input id="name" type="text" placeholder="Họ và tên">
+<div class="row">
+
+<input id="lastName" type="text" placeholder="Họ">
+
+<input id="firstName" type="text" placeholder="Tên">
+
+</div>
 
 <input id="phone" type="text" placeholder="Số điện thoại">
 
@@ -167,6 +173,8 @@ VTA <span> SYSTEMS</span>
 
 <input id="address" type="text" placeholder="Địa chỉ nhận hàng">
 
+<input id="district" type="text" placeholder="Quận / Huyện">
+  
 <input id="city" type="text" placeholder="Tỉnh / Thành phố">
 
 <textarea id="note" placeholder="Ghi chú (không bắt buộc)"></textarea>
@@ -179,6 +187,14 @@ Thông tin cá nhân của bạn sẽ được sử dụng để xử lý đơn 
 
 <select id="payment">
 
+<label style="display:flex;align-items:center;gap:10px;margin:25px 0;">
+
+<input type="checkbox" id="agree">
+
+Tôi đồng ý với điều khoản và chính sách bảo mật.
+
+</label>
+  
 <option>Thanh toán khi nhận hàng (COD)</option>
 
 <option>Chuyển khoản ngân hàng</option>
@@ -239,6 +255,14 @@ return;
 
 }
 
+if(!document.getElementById("agree").checked){
+
+alert("Bạn cần đồng ý điều khoản.");
+
+return;
+
+}
+  
 alert("Đặt hàng thành công!\nVTA SYSTEMS sẽ sớm liên hệ xác nhận đơn hàng.");
 
 localStorage.removeItem("cart");
