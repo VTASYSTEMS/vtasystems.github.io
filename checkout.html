@@ -393,54 +393,34 @@ Tổng thanh toán:
 import { database } from "./firebase.js";
 import { ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
   
-let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-console.log(cart);
-console.log(total);
-  
-if(cart.length===0){
+  let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
-alert("Giỏ hàng đang trống!");
+console.log("Cart =", cart);
 
-window.location.href="cart.html";
-
-}
-
-  
 let total = 0;
-
 let html = "";
 
 cart.forEach(item => {
+    console.log(item);
 
-    console.log("Item:", item);
-    console.log("Price:", item.price);
-    console.log("Qty:", item.qty);
-
-    total += item.price * item.qty;
+    total += Number(item.price) * Number(item.qty);
 
     html += `
     <div class="order-item">
-
         <div style="display:flex;gap:15px;align-items:center;">
-
-            <img src="${item.image}"
-            style="width:70px;height:70px;object-fit:contain;background:#0b0b0b;border-radius:8px;">
-
+            <img src="${item.image}" style="width:70px;height:70px;">
             <div>
                 <strong>${item.name}</strong><br>
                 SL: ${item.qty}
             </div>
-
         </div>
 
-        <div style="font-weight:bold;color:#ff6600;">
-            ${(item.price * item.qty).toLocaleString("vi-VN")}đ
+        <div>
+            ${(Number(item.price) * Number(item.qty)).toLocaleString("vi-VN")}đ
         </div>
-
     </div>
     `;
-
 });
   
 document.getElementById("orderItems").innerHTML=html;
