@@ -318,34 +318,34 @@ Tôi đồng ý với điều khoản sử dụng của VTA SYSTEMS.
 
 </div>
 
-<script>
+<script type="module">
+import { auth, database } from "./firebase.js";
+import { createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+import { ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-function register(){
+document.getElementById("registerForm").addEventListener("submit", async (e) => {
+    e.preventDefault();
 
-const pw=document.getElementById("password").value;
+    const username = document.getElementById("username").value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value;
 
-const cpw=document.getElementById("confirmPassword").value;
+    try {
+        const userCredential = await createUserWithEmailAndPassword(auth, email, password);
 
-if(pw!==cpw){
+        await set(ref(database, "users/" + userCredential.user.uid), {
+            username: username,
+            email: email
+        });
 
-alert("Mật khẩu xác nhận không khớp.");
+        alert("Đăng ký thành công!");
 
-return;
+        window.location.href = "login.html";
 
-}
-
-if(!document.getElementById("agree").checked){
-
-alert("Bạn cần đồng ý điều khoản.");
-
-return;
-
-}
-
-alert("Bước tiếp theo sẽ kết nối Firebase để đăng ký tài khoản và tự động tặng mã miễn phí vận chuyển.");
-
-}
-
+    } catch (error) {
+        alert(error.message);
+    }
+});
 </script>
 
 </body>
