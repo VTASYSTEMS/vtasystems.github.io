@@ -412,7 +412,7 @@ let html="";
 
 cart.forEach(item => {
 
-    total += item.price * item.quantity;
+    total += item.price * item.qty;
 
     html += `
     <div class="order-item">
@@ -424,20 +424,19 @@ cart.forEach(item => {
 
             <div>
                 <strong>${item.name}</strong><br>
-                SL: ${item.quantity}
+                SL: ${item.qty}
             </div>
 
         </div>
 
         <div style="font-weight:bold;color:#ff6600;">
-            ${(item.price * item.quantity).toLocaleString("vi-VN")}đ
+            ${(item.price * item.qty).toLocaleString("vi-VN")}đ
         </div>
 
     </div>
     `;
-
 });
-
+  
 document.getElementById("orderItems").innerHTML=html;
 
 document.getElementById("subTotal").innerHTML=
