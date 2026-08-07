@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Thanh toán | VTA SYSTEMS</title>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family:Arial,Helvetica,sans-serif;
+}
+
+body{
+background:#0b0b0b;
+color:#fff;
+}
+
+header{
+height:75px;
+background:#111;
+display:flex;
+justify-content:center;
+align-items:center;
+font-size:28px;
+font-weight:bold;
+border-bottom:2px solid #222;
+}
+
+header span{
+color:#ff6600;
+}
+
+.container{
+max-width:700px;
+margin:40px auto;
+background:#151515;
+padding:35px;
+border-radius:15px;
+border:1px solid #222;
+}
+
+h1{
+text-align:center;
+margin-bottom:30px;
+}
+
+input,
+textarea,
+select{
+
+width:100%;
+padding:14px;
+margin:12px 0;
+background:#0f0f0f;
+color:white;
+border:1px solid #333;
+border-radius:8px;
+font-size:16px;
+
+}
+
+textarea{
+resize:none;
+height:100px;
+}
+
+.total{
+
+background:#111;
+padding:18px;
+border-radius:10px;
+margin:20px 0;
+font-size:22px;
+font-weight:bold;
+color:#ff6600;
+text-align:center;
+
+}
+
+button{
+
+width:100%;
+padding:16px;
+background:#ff6600;
+color:white;
+border:none;
+border-radius:8px;
+font-size:18px;
+font-weight:bold;
+cursor:pointer;
+
+}
+
+button:hover{
+
+background:#ff7b26;
+
+}
+
+.back{
+
+display:block;
+margin-top:20px;
+text-align:center;
+color:#ccc;
+text-decoration:none;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+
+VTA <span> SYSTEMS</span>
+
+</header>
+
+<div class="container">
+
+<h1>THÔNG TIN GIAO HÀNG</h1>
+
+<input id="name" type="text" placeholder="Họ và tên">
+
+<input id="phone" type="text" placeholder="Số điện thoại">
+
+<input id="email" type="email" placeholder="Email">
+
+<input id="address" type="text" placeholder="Địa chỉ nhận hàng">
+
+<input id="city" type="text" placeholder="Tỉnh / Thành phố">
+
+<textarea id="note" placeholder="Ghi chú (không bắt buộc)"></textarea>
+
+<select id="payment">
+
+<option>Thanh toán khi nhận hàng (COD)</option>
+
+<option>Chuyển khoản ngân hàng</option>
+
+</select>
+
+<div class="total">
+
+Tổng thanh toán:
+<strong id="totalPrice">0đ</strong>
+
+</div>
+
+<button onclick="placeOrder()">
+
+ĐẶT HÀNG
+
+</button>
+
+<a class="back" href="cart.html">
+
+← Quay lại giỏ hàng
+
+</a>
+
+</div>
+
+<script>
+
+let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+let total = 0;
+
+cart.forEach(item=>{
+
+total += item.price * item.quantity;
+
+});
+
+document.getElementById("totalPrice").innerHTML =
+total.toLocaleString("vi-VN")+"đ";
+
+function placeOrder(){
+
+let name=document.getElementById("name").value.trim();
+
+let phone=document.getElementById("phone").value.trim();
+
+let email=document.getElementById("email").value.trim();
+
+let address=document.getElementById("address").value.trim();
+
+if(name==""||phone==""||email==""||address==""){
+
+alert("Vui lòng nhập đầy đủ thông tin!");
+
+return;
+
+}
+
+alert("Đặt hàng thành công!\nVTA SYSTEMS sẽ sớm liên hệ xác nhận đơn hàng.");
+
+localStorage.removeItem("cart");
+
+window.location.href="index.html";
+
+}
+
+</script>
+
+</body>
+</html>
