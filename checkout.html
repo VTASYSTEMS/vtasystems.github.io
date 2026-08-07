@@ -93,6 +93,15 @@ text-align:center;
 
 }
 
+.total-row{
+margin-top:20px;
+padding-top:20px;
+border-top:1px solid #333;
+font-size:24px;
+font-weight:bold;
+color:#ff6600;
+}
+  
 button{
 
 width:100%;
@@ -141,6 +150,58 @@ flex:1;
     margin:30px 0;
 }
 
+.checkout-grid{
+display:grid;
+grid-template-columns:1fr 1.2fr;
+gap:35px;
+}
+
+.order-box{
+background:#111;
+padding:25px;
+border-radius:12px;
+border:1px solid #222;
+height:fit-content;
+}
+
+.order-item{
+display:flex;
+justify-content:space-between;
+margin:15px 0;
+padding-bottom:15px;
+border-bottom:1px solid #222;
+}
+
+.row-price{
+display:flex;
+justify-content:space-between;
+margin:15px 0;
+font-size:17px;
+}
+
+.total-row{
+font-size:22px;
+font-weight:bold;
+color:#ff6600;
+}
+
+@media(max-width:768px){
+
+.checkout-grid{
+display:flex;
+flex-direction:column;
+}
+
+.order-box{
+order:1;
+}
+
+.shipping{
+order:2;
+}
+
+}
+  
 @media(max-width:768px){
 
 .privacy-note{
@@ -165,6 +226,37 @@ VTA <span> SYSTEMS</span>
 <div class="container">
 
 <div class="checkout-grid">
+
+<div class="order-box">
+
+<h1>ĐƠN HÀNG CỦA BẠN</h1>
+
+<div style="display:flex;justify-content:space-between;
+margin-bottom:15px;
+color:#999;
+font-size:14px;">
+
+<span>Sản phẩm</span>
+
+<span>Tạm tính</span>
+
+</div>
+  
+<div id="orderItems"></div>
+
+<hr style="border:1px solid #333;margin:20px 0;">
+
+<div class="row-price">
+<span>Tạm tính</span>
+<strong id="subTotal">0đ</strong>
+</div>
+
+<div class="row-price total-row">
+<span>Tổng cộng</span>
+<strong id="grandTotal">0đ</strong>
+</div>
+
+</div>
 
 <div class="shipping">
   
@@ -233,6 +325,49 @@ let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
 let total = 0;
 
+let html="";
+
+cart.forEach(item=>{
+
+total+=item.price*item.qty;
+
+html+=`
+<div class="order-item">
+
+<div style="display:flex;gap:15px;align-items:center;">
+
+<img src="${item.image}"
+style="width:70px;height:70px;object-fit:contain;background:#0b0b0b;border-radius:8px;">
+
+<div>
+
+<strong>${item.name}</strong><br>
+
+SL: ${item.qty}
+
+</div>
+
+</div>
+
+<div style="font-weight:bold;color:#ff6600;">
+
+${(item.price*item.qty).toLocaleString("vi-VN")}đ
+
+</div>
+
+</div>
+`;
+
+});
+
+document.getElementById("orderItems").innerHTML=html;
+
+document.getElementById("subTotal").innerHTML=
+total.toLocaleString("vi-VN")+"đ";
+
+document.getElementById("grandTotal").innerHTML=
+total.toLocaleString("vi-VN")+"đ";
+  
 cart.forEach(item=>{
 
 total += item.price * item.quantity;
