@@ -300,6 +300,11 @@ font-size:14px;">
 <strong id="subTotal">0đ</strong>
 </div>
 
+<div class="row-price">
+<span>Giảm giá</span>
+<strong id="discountPrice">0đ</strong>
+</div>
+  
 <div class="row-price total-row">
 <span>Tổng cộng</span>
 <strong id="grandTotal">0đ</strong>
@@ -383,10 +388,23 @@ Tổng thanh toán:
 
 </div> <!-- container -->
 
-<script>
+<script type="module">
 
+import { database } from "./firebase.js";
+import { ref, push } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+  
 let cart = JSON.parse(localStorage.getItem("cart")) || [];
 
+
+if(cart.length===0){
+
+alert("Giỏ hàng đang trống!");
+
+window.location.href="cart.html";
+
+}
+
+  
 let total = 0;
 
 let html="";
@@ -432,10 +450,62 @@ total.toLocaleString("vi-VN")+"đ";
 document.getElementById("grandTotal").innerHTML=
 total.toLocaleString("vi-VN")+"đ";
 
-document.getElementById("totalPrice").innerHTML =
-total.toLocaleString("vi-VN")+"đ";
+updateTotal();
 
-function placeOrder(){
+let discount = 0;
+
+function applyCoupon(){
+
+const code = document.getElementById("coupon").value.trim().toUpperCase();
+
+if(code==="WELCOME10"){
+
+discount=100000;
+
+}else if(code==="FREESHIP"){
+
+discount=50000;
+
+}else{
+
+discount=0;
+
+alert("Mã ưu đãi không hợp lệ");
+
+updateTotal();
+
+return;
+
+}
+
+alert("Áp dụng mã thành công!");
+
+updateTotal();
+
+}
+
+function updateTotal(){
+
+let finalTotal = total - discount;
+
+if(finalTotal<0){
+
+finalTotal=0;
+
+}
+
+document.getElementById("discountPrice").innerHTML =
+discount.toLocaleString("vi-VN")+"đ";
+  
+document.getElementById("grandTotal").innerHTML =
+finalTotal.toLocaleString("vi-VN")+"đ";
+
+document.getElementById("totalPrice").innerHTML =
+finalTotal.toLocaleString("vi-VN")+"đ";
+
+}
+  
+async function placeOrder(){
 
 let lastName = document.getElementById("lastName").value.trim();
   
@@ -475,11 +545,43 @@ return;
 
 }
   
-alert("Đặt hàng thành công!\nVTA SYSTEMS sẽ sớm liên hệ xác nhận đơn hàng.");
+const order = {
+    customer:{
+        firstName,
+        lastName,
+        phone,
+        email,
+        address,
+        district,
+        city,
+        note: document.getElementById("note").value,
+    },
+    payment: document.getElementById("payment").value,
+    items: cart,
+    subtotal: total,
+    discount: discount,
+    total: total - discount,
+    createdAt: new Date().toISOString(),
+    status: "Chờ xác nhận"
+};
 
-localStorage.removeItem("cart");
+try{
 
-window.location.href="index.html";
+    await push(ref(database,"orders"),order);
+
+    localStorage.removeItem("cart");
+
+    alert("Đặt hàng thành công!");
+
+    window.location.href="success.html";
+
+}catch(error){
+
+    alert("Có lỗi khi lưu đơn hàng!");
+
+    console.error(error);
+
+}
 
 }
 
