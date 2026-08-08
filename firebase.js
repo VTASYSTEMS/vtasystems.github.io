@@ -1,10 +1,8 @@
-// ===============================
-// FIREBASE SDK
-// ===============================
+// ======================================================
+// VTA SYSTEMS - FIREBASE CONFIG
+// ======================================================
 
-import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
     getAuth
@@ -19,13 +17,14 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 
-// ===============================
+// ======================================================
 // FIREBASE CONFIG
-// ===============================
+// ======================================================
 
 const firebaseConfig = {
 
-    apiKey: "AIzaSyBv_F507Y_8X3yo-Nc1yIqKeYPY6O7TESc",
+    apiKey:
+        "AIzaSyBv_F507Y_8X3yo-Nc1yIqYPY6O7TESc",
 
     authDomain:
         "vta-systems.firebaseapp.com",
@@ -48,23 +47,40 @@ const firebaseConfig = {
 };
 
 
-// ===============================
+// ======================================================
 // KHỞI TẠO FIREBASE
-// ===============================
+// ======================================================
 
 const app =
     initializeApp(firebaseConfig);
 
 
-// ===============================
-// EXPORT
-// ===============================
+// ======================================================
+// FIREBASE AUTHENTICATION
+// ======================================================
 
 export const auth =
     getAuth(app);
 
+
+// ======================================================
+// FIREBASE REALTIME DATABASE
+// ======================================================
+
 export const database =
     getDatabase(app);
 
+
+// ======================================================
+// FIREBASE STORAGE
+// ======================================================
+
 export const storage =
     getStorage(app);
+
+
+// ======================================================
+// EXPORT APP
+// ======================================================
+
+export { app };
