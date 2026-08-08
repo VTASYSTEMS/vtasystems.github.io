@@ -2077,6 +2077,58 @@ editProductImages.addEventListener(
         editProductDescription.value =
             product.description || "";
 
+// ======================================
+// NẠP ẢNH CŨ
+// ======================================
+
+editExistingImages =
+    Array.isArray(product.images)
+        ? [...product.images]
+        : (
+            product.image
+                ? [product.image]
+                : []
+        );
+
+
+// ======================================
+// RESET ẢNH / VIDEO ĐANG CHỈNH SỬA
+// ======================================
+
+editNewImages = [];
+
+editDeletedImages = [];
+
+editNewVideo = null;
+
+editDeletedVideo = false;
+
+
+// ======================================
+// NẠP VIDEO CŨ
+// ======================================
+
+editExistingVideo =
+    product.video || "";
+
+
+// ======================================
+// XÓA FILE ĐANG CHỌN TRONG INPUT
+// ======================================
+
+editProductImages.value = "";
+
+editProductVideo.value = "";
+
+
+// ======================================
+// HIỂN THỊ MEDIA
+// ======================================
+
+renderEditImages();
+
+renderEditVideo();
+        
 
         // ===============================
         // RESET MEDIA
@@ -2249,39 +2301,226 @@ saveEditProduct.addEventListener(
                 );
 
 
-            // Lấy dữ liệu cũ để giữ ảnh
+        
+            // ======================================
+// LẤY DỮ LIỆU CŨ
+// ======================================
 
-            const oldSnapshot =
-                await get(productRef);
+const oldSnapshot =
+    await get(productRef);
 
-
-            const oldProduct =
-                oldSnapshot.exists()
-                    ? oldSnapshot.val()
-                    : {};
-
-
-            const updatedProduct = {
-
-                ...oldProduct,
-
-                name: name,
-
-                price: price,
-
-                category: category,
-
-                stock: stock,
-
-                description: description
-
-            };
+const oldProduct =
+    oldSnapshot.exists()
+        ? oldSnapshot.val()
+        : {};
 
 
-            await set(
-                productRef,
-                updatedProduct
+// ======================================
+// XÓA ẢNH CŨ ĐÃ BỊ XÓA TRONG ADMIN
+// ======================================
+
+for (const imageUrl of editDeletedImages) {
+
+    try {
+
+        const imageStorageRef =
+            storageRef(
+                storage,
+                imageUrl
             );
+
+        await deleteObject(
+            imageStorageRef
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Không thể xóa ảnh cũ:",
+            error
+        );
+
+    }
+
+}
+
+
+// ======================================
+// UPLOAD ẢNH MỚI
+// ======================================
+
+const uploadedNewImages = [];
+
+for (
+    let i = 0;
+    i < editNewImages.length;
+    i++
+) {
+
+    const file =
+        editNewImages[i];
+
+    const fileName =
+        Date.now() +
+        "_" +
+        i +
+        "_" +
+        file.name;
+
+    const imageRef =
+        storageRef(
+            storage,
+            `products/${id}/images/${fileName}`
+        );
+
+    await uploadBytes(
+        imageRef,
+        file
+    );
+
+    const url =
+        await getDownloadURL(
+            imageRef
+        );
+
+    uploadedNewImages.push(url);
+
+}
+
+
+// ======================================
+// TẠO DANH SÁCH ẢNH CUỐI CÙNG
+// ======================================
+
+const finalImages = [
+
+    ...editExistingImages,
+
+    ...uploadedNewImages
+
+];
+
+
+if (finalImages.length > 7) {
+
+    throw new Error(
+        "Mỗi sản phẩm chỉ được tối đa 7 ảnh."
+    );
+
+}
+
+
+// ======================================
+// VIDEO
+// ======================================
+
+let finalVideo =
+    editExistingVideo || "";
+
+
+// ======================================
+// XÓA VIDEO CŨ
+// ======================================
+
+if (
+    editDeletedVideo &&
+    oldProduct.video
+) {
+
+    try {
+
+        const oldVideoRef =
+            storageRef(
+                storage,
+                oldProduct.video
+            );
+
+        await deleteObject(
+            oldVideoRef
+        );
+
+    } catch (error) {
+
+        console.warn(
+            "Không thể xóa video cũ:",
+            error
+        );
+
+    }
+
+    finalVideo = "";
+
+}
+
+
+// ======================================
+// UPLOAD VIDEO MỚI
+// ======================================
+
+if (editNewVideo) {
+
+    const videoFileName =
+        Date.now() +
+        "_" +
+        editNewVideo.name;
+
+    const newVideoRef =
+        storageRef(
+            storage,
+            `products/${id}/video/${videoFileName}`
+        );
+
+    await uploadBytes(
+        newVideoRef,
+        editNewVideo
+    );
+
+    finalVideo =
+        await getDownloadURL(
+            newVideoRef
+        );
+
+}
+
+
+// ======================================
+// CẬP NHẬT PRODUCT
+// ======================================
+
+const updatedProduct = {
+
+    ...oldProduct,
+
+    name: name,
+
+    price: price,
+
+    category: category,
+
+    stock: stock,
+
+    description: description,
+
+    images: finalImages,
+
+    video: finalVideo,
+
+    image:
+        finalImages.length > 0
+            ? finalImages[0]
+            : ""
+
+};
+
+
+// ======================================
+// LƯU FIREBASE DATABASE
+// ======================================
+
+await set(
+    productRef,
+    updatedProduct
+);
 
 
             editProductMessage.textContent =
