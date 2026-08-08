@@ -641,7 +641,7 @@ VTA <span><i class="fa-solid fa-bolt"></i></span> SYSTEMS
   <h2 class="section-title">Danh Sách <span>Mẫu Loa</span></h2>
   
   <div class="product-grid">
-
+    
 <div id="firebaseProducts"></div>
     
     <div class="product-card">
@@ -935,6 +935,159 @@ logout.onclick = async (e) => {
     window.location.reload();
 
 };
+
+</script>
+
+<script type="module">
+
+import { database } from "./firebase.js";
+
+import {
+    ref,
+    onValue
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+const firebaseProducts =
+    document.getElementById("firebaseProducts");
+
+
+if (firebaseProducts) {
+
+    onValue(
+        ref(database, "products"),
+        (snapshot) => {
+
+            firebaseProducts.innerHTML = "";
+
+            if (!snapshot.exists()) {
+                return;
+            }
+
+            const products = snapshot.val();
+
+
+            Object.entries(products).forEach(
+                ([id, product]) => {
+
+                    const card =
+                        document.createElement("div");
+
+                    card.className =
+                        "product-card";
+
+
+                    const image =
+                        product.image ||
+                        "dravox-one.png";
+
+
+                    const price =
+                        Number(product.price || 0);
+
+
+                    card.innerHTML = `
+
+                        <div>
+
+                            <div class="product-slider-wrapper">
+
+                                <div class="product-slider">
+
+                                    <img
+                                        src="${image}"
+                                        alt="${product.name || "Sản phẩm"}"
+                                    >
+
+                                </div>
+
+                            </div>
+
+
+                            <div class="product-brand">
+                                VTA Systems
+                            </div>
+
+
+                            <h3>
+                                ${product.name || "Sản phẩm"}
+                            </h3>
+
+
+                            <div class="tagline">
+                                ${product.category || ""}
+                            </div>
+
+
+                            <p>
+                                ${product.description || ""}
+                            </p>
+
+
+                            <ul class="tech-specs">
+
+                                <li>
+                                    <i class="fa-solid fa-tag"></i>
+                                    <strong>Giá:</strong>
+                                    ${price.toLocaleString("vi-VN")}đ
+                                </li>
+
+                                <li>
+                                    <i class="fa-solid fa-box"></i>
+                                    <strong>Tồn kho:</strong>
+                                    ${product.stock ?? 0}
+                                </li>
+
+                            </ul>
+
+                        </div>
+
+
+                        <button
+                            class="button"
+                            type="button"
+                        >
+                            🛒 Thêm vào giỏ
+                        </button>
+
+                    `;
+
+
+                    const cartButton =
+                        card.querySelector("button");
+
+
+                    cartButton.addEventListener(
+                        "click",
+                        () => {
+
+                            addToCart(
+                                product.name || "Sản phẩm",
+                                price,
+                                image
+                            );
+
+                        }
+                    );
+
+
+                    firebaseProducts.appendChild(card);
+
+                }
+            );
+
+        },
+        (error) => {
+
+            console.error(
+                "Lỗi tải sản phẩm Firebase:",
+                error
+            );
+
+        }
+    );
+
+}
 
 </script>
   
