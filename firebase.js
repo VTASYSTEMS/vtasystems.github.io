@@ -1,88 +1,71 @@
-// ======================================================
+// ============================================================
 // VTA SYSTEMS - FIREBASE CONFIG
-// ======================================================
+// ============================================================
+
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
-    initializeApp
-} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-
-import {
-    getAuth
+  getAuth
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
 
 import {
-    getDatabase
+  getDatabase
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 import {
-    getStorage
+  getStorage
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
 
-// ======================================================
-// FIREBASE CONFIG
-// ======================================================
+// ============================================================
+// FIREBASE CONFIGURATION
+// ============================================================
 
 const firebaseConfig = {
+  apiKey: "AIzaSyBv_F507Y_8X3yo-Nc1yIqKeYPY607TEsc",
 
-    apiKey:
-        "AIzaSyBv_F507Y_8X3yo-Nc1yIqKeYPY6O7TESc",
+  authDomain: "vta-systems.firebaseapp.com",
 
-    authDomain:
-        "vta-systems.firebaseapp.com",
+  databaseURL:
+    "https://vta-systems-default-rtdb.asia-southeast1.firebasedatabase.app",
 
-    databaseURL:
-        "https://vta-systems-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "vta-systems",
 
-    projectId:
-        "vta-systems",
+  storageBucket: "vta-systems.firebasestorage.app",
 
-    storageBucket:
-        "vta-systems.firebasestorage.app",
+  messagingSenderId: "597894554622",
 
-    messagingSenderId:
-        "597894554622",
+  appId: "1:597894554622:web:3fc5ab6c87ad5de68c16af",
 
-    appId:
-        "1:597894554622:web:3fc5ab6c87ad5de68c16af"
-
+  measurementId: "G-VDBE0E0374"
 };
 
 
-// ======================================================
-// KHỞI TẠO FIREBASE
-// ======================================================
+// ============================================================
+// INITIALIZE FIREBASE
+// ============================================================
 
-const app =
-    initializeApp(firebaseConfig);
-
-
-// ======================================================
-// FIREBASE AUTHENTICATION
-// ======================================================
-
-export const auth =
-    getAuth(app);
+const app = initializeApp(firebaseConfig);
 
 
-// ======================================================
-// FIREBASE REALTIME DATABASE
-// ======================================================
+// ============================================================
+// FIREBASE SERVICES
+// ============================================================
 
-export const database =
-    getDatabase(app);
+const auth = getAuth(app);
 
+const database = getDatabase(app);
 
-// ======================================================
-// FIREBASE STORAGE
-// ======================================================
-
-export const storage =
-    getStorage(app);
+const storage = getStorage(app);
 
 
-// ======================================================
-// EXPORT APP
-// ======================================================
+// ============================================================
+// EXPORT
+// ============================================================
 
-export { app };
+export {
+  app,
+  auth,
+  database,
+  storage
+};
