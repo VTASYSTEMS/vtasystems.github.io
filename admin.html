@@ -202,6 +202,56 @@ text-align:left;
 
 }
 
+.admin-product-item {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    padding: 18px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.admin-product-image {
+    width: 90px;
+    height: 90px;
+    object-fit: cover;
+    border-radius: 10px;
+    background: #f1f1f1;
+}
+
+.admin-product-info {
+    flex: 1;
+}
+
+.admin-product-info h3 {
+    margin-bottom: 6px;
+}
+
+.admin-product-price {
+    color: #2563eb;
+    font-weight: 600;
+}
+
+.admin-product-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.edit-product {
+    background: #f59e0b;
+}
+
+.edit-product:hover {
+    background: #d97706;
+}
+
+.delete-product {
+    background: #dc2626;
+}
+
+.delete-product:hover {
+    background: #b91c1c;
+}
+  
 </style>
 
 </head>
@@ -268,6 +318,18 @@ text-align:left;
 
 </div>
 
+<div class="section">
+
+    <h2>🛒 Quản lý sản phẩm</h2>
+
+    <div id="adminProductList">
+
+        <p>Đang tải sản phẩm...</p>
+
+    </div>
+
+</div>
+  
 <div class="section">
 
     <h2>➕ Thêm sản phẩm</h2>
@@ -376,6 +438,8 @@ onAuthStateChanged(auth, async (user) => {
 
     loadDashboard();
 
+loadAdminProducts();
+  
 });
 
 
@@ -657,6 +721,135 @@ addProductButton.addEventListener("click", async () => {
     }
 
 });
+
+// ===============================
+// DANH SÁCH SẢN PHẨM ADMIN
+// ===============================
+
+const adminProductList =
+    document.getElementById("adminProductList");
+
+
+async function loadAdminProducts() {
+
+    try {
+
+        const snapshot =
+            await get(ref(database, "products"));
+
+        if (!snapshot.exists()) {
+
+            adminProductList.innerHTML = `
+                <p>Chưa có sản phẩm nào.</p>
+            `;
+
+            return;
+        }
+
+
+        const products =
+            snapshot.val();
+
+
+        adminProductList.innerHTML = "";
+
+
+        Object.entries(products).forEach(
+            ([id, product]) => {
+
+                const item =
+                    document.createElement("div");
+
+                item.className =
+                    "admin-product-item";
+
+
+                const image =
+                    product.image ||
+                    "dravox-one.png";
+
+
+                const price =
+                    Number(product.price || 0);
+
+
+                item.innerHTML = `
+
+                    <img
+                        class="admin-product-image"
+                        src="${image}"
+                        alt="${product.name || "Sản phẩm"}"
+                    >
+
+
+                    <div class="admin-product-info">
+
+                        <h3>
+                            ${product.name || "Chưa đặt tên"}
+                        </h3>
+
+                        <div class="admin-product-price">
+                            ${price.toLocaleString("vi-VN")}đ
+                        </div>
+
+                        <div>
+                            Danh mục:
+                            ${product.category || "Chưa có"}
+                        </div>
+
+                        <div>
+                            Tồn kho:
+                            ${product.stock ?? 0}
+                        </div>
+
+                    </div>
+
+
+                    <div class="admin-product-actions">
+
+                        <button
+                            class="edit-product"
+                            data-id="${id}"
+                        >
+                            ✏️ Sửa
+                        </button>
+
+
+                        <button
+                            class="delete-product"
+                            data-id="${id}"
+                        >
+                            🗑️ Xóa
+                        </button>
+
+                    </div>
+
+                `;
+
+
+                adminProductList.appendChild(item);
+
+            }
+        );
+
+
+    } catch (error) {
+
+        console.error(
+            "Lỗi tải sản phẩm:",
+            error
+        );
+
+
+        adminProductList.innerHTML = `
+            <p style="color:red;">
+                ❌ Không thể tải danh sách sản phẩm.
+            </p>
+        `;
+
+    }
+
+}
   
 </script>
   
