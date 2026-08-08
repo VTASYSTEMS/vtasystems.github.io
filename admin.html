@@ -1032,7 +1032,352 @@ async function loadAdminProducts() {
     }
 
 }
-  
+
+// ===============================
+// SỬA SẢN PHẨM
+// ===============================
+
+const editProductSection =
+    document.getElementById("editProductSection");
+
+const editProductId =
+    document.getElementById("editProductId");
+
+const editProductName =
+    document.getElementById("editProductName");
+
+const editProductPrice =
+    document.getElementById("editProductPrice");
+
+const editProductCategory =
+    document.getElementById("editProductCategory");
+
+const editProductStock =
+    document.getElementById("editProductStock");
+
+const editProductDescription =
+    document.getElementById("editProductDescription");
+
+const saveEditProduct =
+    document.getElementById("saveEditProduct");
+
+const cancelEditProduct =
+    document.getElementById("cancelEditProduct");
+
+const editProductMessage =
+    document.getElementById("editProductMessage");
+
+
+// ===============================
+// BẤM NÚT SỬA
+// ===============================
+
+adminProductList.addEventListener("click", async (event) => {
+
+    const editButton =
+        event.target.closest(".edit-product");
+
+    if (!editButton) {
+        return;
+    }
+
+
+    const productId =
+        editButton.dataset.id;
+
+
+    if (!productId) {
+        return;
+    }
+
+
+    try {
+
+        const snapshot =
+            await get(
+                ref(
+                    database,
+                    "products/" + productId
+                )
+            );
+
+
+        if (!snapshot.exists()) {
+
+            alert(
+                "❌ Không tìm thấy sản phẩm."
+            );
+
+            return;
+        }
+
+
+        const product =
+            snapshot.val();
+
+
+        // Đưa dữ liệu vào form
+
+        editProductId.value =
+            productId;
+
+        editProductName.value =
+            product.name || "";
+
+        editProductPrice.value =
+            product.price || "";
+
+        editProductCategory.value =
+            product.category || "";
+
+        editProductStock.value =
+            product.stock ?? "";
+
+        editProductDescription.value =
+            product.description || "";
+
+
+        // Hiện khu vực sửa
+
+        editProductSection.style.display =
+            "block";
+
+
+        // Cuộn tới form
+
+        editProductSection.scrollIntoView({
+            behavior: "smooth",
+            block: "start"
+        });
+
+
+        editProductMessage.textContent =
+            "";
+
+
+    } catch (error) {
+
+        console.error(
+            "Lỗi tải sản phẩm:",
+            error
+        );
+
+        alert(
+            "❌ Không thể mở sản phẩm để sửa."
+        );
+
+    }
+
+});
+
+
+// ===============================
+// LƯU THAY ĐỔI
+// ===============================
+
+saveEditProduct.addEventListener(
+    "click",
+    async () => {
+
+        const id =
+            editProductId.value;
+
+
+        const name =
+            editProductName.value.trim();
+
+
+        const price =
+            Number(
+                editProductPrice.value
+            );
+
+
+        const category =
+            editProductCategory.value.trim();
+
+
+        const stock =
+            Number(
+                editProductStock.value
+            );
+
+
+        const description =
+            editProductDescription.value.trim();
+
+
+        // Kiểm tra
+
+        if (!id) {
+
+            editProductMessage.textContent =
+                "❌ Không xác định được sản phẩm.";
+
+            return;
+
+        }
+
+
+        if (!name) {
+
+            editProductMessage.textContent =
+                "⚠️ Vui lòng nhập tên sản phẩm.";
+
+            return;
+
+        }
+
+
+        if (!Number.isFinite(price) || price < 0) {
+
+            editProductMessage.textContent =
+                "⚠️ Giá sản phẩm không hợp lệ.";
+
+            return;
+
+        }
+
+
+        if (!category) {
+
+            editProductMessage.textContent =
+                "⚠️ Vui lòng nhập danh mục.";
+
+            return;
+
+        }
+
+
+        if (!Number.isInteger(stock) || stock < 0) {
+
+            editProductMessage.textContent =
+                "⚠️ Số lượng tồn kho không hợp lệ.";
+
+            return;
+
+        }
+
+
+        try {
+
+            saveEditProduct.disabled =
+                true;
+
+            saveEditProduct.textContent =
+                "ĐANG LƯU...";
+
+
+            const productRef =
+                ref(
+                    database,
+                    "products/" + id
+                );
+
+
+            // Lấy dữ liệu cũ để giữ ảnh
+
+            const oldSnapshot =
+                await get(productRef);
+
+
+            const oldProduct =
+                oldSnapshot.exists()
+                    ? oldSnapshot.val()
+                    : {};
+
+
+            const updatedProduct = {
+
+                ...oldProduct,
+
+                name: name,
+
+                price: price,
+
+                category: category,
+
+                stock: stock,
+
+                description: description
+
+            };
+
+
+            await set(
+                productRef,
+                updatedProduct
+            );
+
+
+            editProductMessage.textContent =
+                "✅ Đã cập nhật sản phẩm.";
+
+
+            // Tải lại danh sách
+
+            await loadAdminProducts();
+
+
+            // Cập nhật Dashboard
+
+            loadDashboard();
+
+
+            // Đóng form sau một chút
+
+            setTimeout(() => {
+
+                editProductSection.style.display =
+                    "none";
+
+            }, 800);
+
+
+        } catch (error) {
+
+            console.error(
+                "Lỗi cập nhật sản phẩm:",
+                error
+            );
+
+
+            editProductMessage.textContent =
+                "❌ Không thể cập nhật: " +
+                error.message;
+
+
+        } finally {
+
+            saveEditProduct.disabled =
+                false;
+
+            saveEditProduct.textContent =
+                "💾 LƯU THAY ĐỔI";
+
+        }
+
+    }
+);
+
+
+// ===============================
+// HỦY SỬA
+// ===============================
+
+cancelEditProduct.addEventListener(
+    "click",
+    () => {
+
+        editProductSection.style.display =
+            "none";
+
+        editProductMessage.textContent =
+            "";
+
+    }
+);
+    
 </script>
   
 </body>
