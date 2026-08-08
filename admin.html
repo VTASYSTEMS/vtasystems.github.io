@@ -270,6 +270,180 @@ text-align:left;
 
  </div>
 
+<script type="module">
+
+import { auth, database } from "./firebase.js";
+
+import {
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    ref,
+    get
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+// ===============================
+// KIỂM TRA ĐĂNG NHẬP
+// ===============================
+
+onAuthStateChanged(auth, async (user) => {
+
+    if (!user) {
+
+        window.location.href = "login.html";
+
+        return;
+
+    }
+
+    console.log("Admin đang đăng nhập:", user.email);
+
+    loadDashboard();
+
+});
+
+
+// ===============================
+// DASHBOARD
+// ===============================
+
+async function loadDashboard() {
+
+    try {
+
+        // -------------------------
+        // ĐẾM SẢN PHẨM
+        // -------------------------
+
+        const productsSnapshot =
+            await get(ref(database, "products"));
+
+        let productCount = 0;
+
+        if (productsSnapshot.exists()) {
+
+            productCount =
+                Object.keys(productsSnapshot.val()).length;
+
+        }
+
+        document.getElementById("productCount").textContent =
+            productCount;
+
+
+        // -------------------------
+        // ĐẾM KHÁCH HÀNG
+        // -------------------------
+
+        const usersSnapshot =
+            await get(ref(database, "users"));
+
+        let customerCount = 0;
+
+        if (usersSnapshot.exists()) {
+
+            customerCount =
+                Object.keys(usersSnapshot.val()).length;
+
+        }
+
+        document.getElementById("customerCount").textContent =
+            customerCount;
+
+
+        // -------------------------
+        // ĐẾM ĐƠN HÀNG
+        // -------------------------
+
+        const ordersSnapshot =
+            await get(ref(database, "orders"));
+
+        let orderCount = 0;
+
+        let revenue = 0;
+
+        if (ordersSnapshot.exists()) {
+
+            const orders =
+                ordersSnapshot.val();
+
+            orderCount =
+                Object.keys(orders).length;
+
+
+            // TÍNH DOANH THU
+
+            Object.values(orders).forEach(order => {
+
+                let total =
+                    Number(order.total || 0);
+
+                revenue += total;
+
+            });
+
+        }
+
+
+        document.getElementById("orderCount").textContent =
+            orderCount;
+
+
+        // -------------------------
+        // HIỂN THỊ DOANH THU
+        // -------------------------
+
+        document.getElementById("revenue").textContent =
+            revenue.toLocaleString("vi-VN") + "đ";
+
+
+    } catch (error) {
+
+        console.error(
+            "Không thể tải Dashboard:",
+            error
+        );
+
+    }
+
+}
+
+
+// ===============================
+// ĐĂNG XUẤT
+// ===============================
+
+const logoutButton =
+    document.querySelector(".sidebar a:last-child");
+
+
+logoutButton.addEventListener("click", async (event) => {
+
+    event.preventDefault();
+
+    try {
+
+        await signOut(auth);
+
+        window.location.href =
+            "login.html";
+
+    } catch (error) {
+
+        console.error(
+            "Lỗi đăng xuất:",
+            error
+        );
+
+    }
+
+});
+
+</script>
+  
 </body>
 
 </html> 
