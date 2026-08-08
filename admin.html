@@ -336,17 +336,41 @@ import {
 // KIỂM TRA ĐĂNG NHẬP
 // ===============================
 
+// ===============================
+// TÀI KHOẢN ADMIN DUY NHẤT
+// ===============================
+
+const ADMIN_EMAIL = "vtasystems.vn@gmail.com";
+
+
+// ===============================
+// KIỂM TRA QUYỀN ADMIN
+// ===============================
+
 onAuthStateChanged(auth, async (user) => {
 
+    // Chưa đăng nhập
     if (!user) {
 
         window.location.href = "login.html";
 
         return;
-
     }
 
-    console.log("Admin đang đăng nhập:", user.email);
+
+    // Đã đăng nhập nhưng không phải Admin
+    if (user.email !== ADMIN_EMAIL) {
+
+        alert("❌ Bạn không có quyền truy cập trang quản trị.");
+
+        window.location.href = "index.html";
+
+        return;
+    }
+
+
+    // Đúng tài khoản Admin
+    console.log("👑 ADMIN:", user.email);
 
     loadDashboard();
 
