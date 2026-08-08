@@ -632,6 +632,206 @@ import {
     deleteObject
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
+<script type="module">
+
+// ======================================
+// IMPORT
+// ======================================
+
+import { auth, database, storage } from "./firebase.js";
+
+import {
+    onAuthStateChanged,
+    signOut
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js";
+
+import {
+    ref,
+    get,
+    set,
+    push,
+    update,
+    remove
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+
+// ======================================
+// QUẢN LÝ ẢNH / VIDEO KHI THÊM SẢN PHẨM
+// ======================================
+
+const imageInput =
+    document.getElementById("productImages");
+
+const videoInput =
+    document.getElementById("productVideo");
+
+const imagePreview =
+    document.getElementById("imagePreview");
+
+const videoPreview =
+    document.getElementById("videoPreview");
+
+let selectedImages = [];
+
+let selectedVideo = null;
+
+
+// ======================================
+// CHỌN ẢNH
+// ======================================
+
+imageInput.addEventListener("change", () => {
+
+    const files =
+        Array.from(imageInput.files);
+
+    if (
+        selectedImages.length + files.length > 7
+    ) {
+
+        alert("⚠️ Mỗi sản phẩm chỉ được tối đa 7 ảnh.");
+
+        imageInput.value = "";
+
+        return;
+    }
+
+    selectedImages =
+        selectedImages.concat(files);
+
+    renderImagePreview();
+
+});
+
+
+// ======================================
+// HIỂN THỊ ẢNH
+// ======================================
+
+function renderImagePreview() {
+
+    imagePreview.innerHTML = "";
+
+    selectedImages.forEach((file, index) => {
+
+        const wrapper =
+            document.createElement("div");
+
+        wrapper.className =
+            "image-preview-item";
+
+
+        const img =
+            document.createElement("img");
+
+        img.src =
+            URL.createObjectURL(file);
+
+
+        const removeButton =
+            document.createElement("button");
+
+        removeButton.type =
+            "button";
+
+        removeButton.className =
+            "image-remove";
+
+        removeButton.textContent =
+            "×";
+
+
+        removeButton.onclick = () => {
+
+            selectedImages.splice(index, 1);
+
+            renderImagePreview();
+
+        };
+
+
+        wrapper.appendChild(img);
+
+        wrapper.appendChild(removeButton);
+
+        imagePreview.appendChild(wrapper);
+
+    });
+
+}
+
+
+// ======================================
+// CHỌN VIDEO
+// ======================================
+
+videoInput.addEventListener("change", () => {
+
+    const file =
+        videoInput.files[0];
+
+    if (!file) {
+        return;
+    }
+
+    selectedVideo = file;
+
+    renderVideoPreview();
+
+});
+
+
+// ======================================
+// HIỂN THỊ VIDEO
+// ======================================
+
+function renderVideoPreview() {
+
+    videoPreview.innerHTML = "";
+
+    if (!selectedVideo) {
+        return;
+    }
+
+
+    const video =
+        document.createElement("video");
+
+    video.controls = true;
+
+    video.src =
+        URL.createObjectURL(selectedVideo);
+
+
+    const removeButton =
+        document.createElement("button");
+
+    removeButton.type =
+        "button";
+
+    removeButton.className =
+        "video-remove";
+
+    removeButton.textContent =
+        "🗑️ Xóa video";
+
+
+    removeButton.onclick = () => {
+
+        selectedVideo = null;
+
+        videoInput.value = "";
+
+        renderVideoPreview();
+
+    };
+
+
+    videoPreview.appendChild(video);
+
+    videoPreview.appendChild(removeButton);
+
+}    
 
 // ===============================
 // KIỂM TRA ĐĂNG NHẬP
