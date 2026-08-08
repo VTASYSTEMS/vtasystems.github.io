@@ -439,7 +439,120 @@ onAuthStateChanged(auth, async (user) => {
     loadDashboard();
 
 loadAdminProducts();
-  
+
+// ===============================
+// XÓA SẢN PHẨM
+// ===============================
+
+adminProductList.addEventListener("click", async (event) => {
+
+    const deleteButton =
+        event.target.closest(".delete-product");
+
+    if (!deleteButton) {
+        return;
+    }
+
+    const productId =
+        deleteButton.dataset.id;
+
+    if (!productId) {
+        return;
+    }
+
+
+    // Tìm sản phẩm đang muốn xóa
+
+    const productSnapshot =
+        await get(
+            ref(database, "products/" + productId)
+        );
+
+
+    if (!productSnapshot.exists()) {
+
+        alert("❌ Không tìm thấy sản phẩm.");
+
+        return;
+
+    }
+
+
+    const product =
+        productSnapshot.val();
+
+
+    const productName =
+        product.name || "sản phẩm này";
+
+
+    // Xác nhận trước khi xóa
+
+    const confirmed =
+        confirm(
+            `Bạn có chắc muốn xóa "${productName}" không?`
+        );
+
+
+    if (!confirmed) {
+        return;
+    }
+
+
+    try {
+
+        deleteButton.disabled = true;
+
+        deleteButton.textContent =
+            "ĐANG XÓA...";
+
+
+        // Xóa khỏi Firebase
+
+        await set(
+            ref(database, "products/" + productId),
+            null
+        );
+
+
+        alert(
+            `✅ Đã xóa "${productName}".`
+        );
+
+
+        // Tải lại danh sách
+
+        loadAdminProducts();
+
+
+        // Cập nhật Dashboard
+
+        loadDashboard();
+
+
+    } catch (error) {
+
+        console.error(
+            "Lỗi xóa sản phẩm:",
+            error
+        );
+
+
+        alert(
+            "❌ Không thể xóa sản phẩm: " +
+            error.message
+        );
+
+
+        deleteButton.disabled = false;
+
+        deleteButton.textContent =
+            "🗑️ Xóa";
+
+    }
+
+});
+    
 });
 
 
