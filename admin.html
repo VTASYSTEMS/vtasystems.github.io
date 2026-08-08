@@ -1152,17 +1152,32 @@ logoutButton.addEventListener("click", async (event) => {
 
 });
 
-// ===============================
+// ======================================
 // THÊM SẢN PHẨM + UPLOAD ẢNH / VIDEO
-// ===============================
+// ======================================
 
 import {
-    uploadBytes,
+    uploadBytesResumable,
     getDownloadURL,
-    deleteObject,
-    ref as storageRef
+    ref as storageRef,
+    setMaxUploadRetryTime,
+    setMaxOperationRetryTime
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
 
+
+// ======================================
+// GIỚI HẠN RETRY
+// Không để Firebase treo 6-7 phút
+// ======================================
+
+setMaxUploadRetryTime(storage, 30000);
+
+setMaxOperationRetryTime(storage, 30000);
+
+
+// ======================================
+// ELEMENT
+// ======================================
 
 const addProductButton =
     document.getElementById("addProductButton");
@@ -1171,25 +1186,257 @@ const productMessage =
     document.getElementById("productMessage");
 
 
-// ===============================
-// HÀM UPLOAD ẢNH
-// ===============================
+// ======================================
+// NÉN ẢNH TRƯỚC KHI UPLOAD
+// ======================================
 
-async function uploadProductImages(productId) {
+function compressImage(file) {
+
+    return new Promise((resolve, reject) => {
+
+        const img =
+            new Image();
+
+        const objectUrl =
+            URL.createObjectURL(file);
+
+
+        img.onload = () => {
+
+            URL.revokeObjectURL(objectUrl);
+
+
+            const MAX_WIDTH = 1920;
+            const MAX_HEIGHT = 1920;
+
+            let width = img.width;
+            let height = img.height;
+
+
+            // -------------------------
+            // GIẢM KÍCH THƯỚC
+            // -------------------------
+
+            if (
+                width > MAX_WIDTH ||
+                height > MAX_HEIGHT
+            ) {
+
+                const ratio =
+                    Math.min(
+                        MAX_WIDTH / width,
+                        MAX_HEIGHT / height
+                    );
+
+                width =
+                    Math.round(width * ratio);
+
+                height =
+                    Math.round(height * ratio);
+
+            }
+
+
+            const canvas =
+                document.createElement("canvas");
+
+            canvas.width =
+                width;
+
+            canvas.height =
+                height;
+
+
+            const ctx =
+                canvas.getContext("2d");
+
+
+            ctx.drawImage(
+                img,
+                0,
+                0,
+                width,
+                height
+            );
+
+
+            // -------------------------
+            // CHUYỂN SANG JPEG
+            // -------------------------
+
+            canvas.toBlob(
+                (blob) => {
+
+                    if (!blob) {
+
+                        reject(
+                            new Error(
+                                "Không thể xử lý ảnh."
+                            )
+                        );
+
+                        return;
+                    }
+
+
+                    resolve(blob);
+
+                },
+                "image/jpeg",
+                0.82
+            );
+
+        };
+
+
+        img.onerror = () => {
+
+            URL.revokeObjectURL(objectUrl);
+
+            reject(
+                new Error(
+                    "Không thể đọc ảnh."
+                )
+            );
+
+        };
+
+
+        img.src =
+            objectUrl;
+
+    });
+
+}
+
+
+// ======================================
+// UPLOAD 1 FILE CÓ TIẾN TRÌNH
+// ======================================
+
+function uploadFileWithProgress(
+    fileData,
+    fileRef,
+    messageElement,
+    label,
+    contentType
+) {
+
+    return new Promise(
+        (resolve, reject) => {
+
+            const uploadTask =
+                uploadBytesResumable(
+                    fileRef,
+                    fileData,
+                    {
+                        contentType:
+                            contentType
+                    }
+                );
+
+
+            uploadTask.on(
+
+                "state_changed",
+
+                (snapshot) => {
+
+                    const percent =
+                        Math.round(
+                            (
+                                snapshot.bytesTransferred /
+                                snapshot.totalBytes
+                            ) * 100
+                        );
+
+
+                    messageElement.textContent =
+                        `${label} ${percent}%`;
+
+                },
+
+                (error) => {
+
+                    console.error(
+                        "UPLOAD ERROR:",
+                        error
+                    );
+
+
+                    reject(error);
+
+                },
+
+                async () => {
+
+                    try {
+
+                        const url =
+                            await getDownloadURL(
+                                uploadTask.snapshot.ref
+                            );
+
+
+                        resolve(url);
+
+                    } catch (error) {
+
+                        reject(error);
+
+                    }
+
+                }
+
+            );
+
+        }
+    );
+
+}
+
+
+// ======================================
+// UPLOAD ẢNH
+// ======================================
+
+async function uploadProductImages(
+    productId
+) {
 
     const imageUrls = [];
 
-    for (let i = 0; i < selectedImages.length; i++) {
 
-        const file =
+    for (
+        let i = 0;
+        i < selectedImages.length;
+        i++
+    ) {
+
+        const originalFile =
             selectedImages[i];
+
+
+        productMessage.textContent =
+            `⏳ Đang xử lý ảnh ${i + 1}/${selectedImages.length}...`;
+
+
+        // -------------------------
+        // NÉN ẢNH
+        // -------------------------
+
+        const compressedBlob =
+            await compressImage(
+                originalFile
+            );
+
 
         const fileName =
             Date.now() +
             "_" +
             i +
-            "_" +
-            file.name;
+            ".jpg";
+
 
         const imageRef =
             storageRef(
@@ -1198,39 +1445,80 @@ async function uploadProductImages(productId) {
             );
 
 
-        await uploadBytes(
-            imageRef,
-            file
-        );
+        productMessage.textContent =
+            `⏳ Đang tải ảnh ${i + 1}/${selectedImages.length}...`;
 
 
         const url =
-            await getDownloadURL(imageRef);
+            await uploadFileWithProgress(
+                compressedBlob,
+                imageRef,
+                productMessage,
+                `⏳ Đang tải ảnh ${i + 1}/${selectedImages.length}...`,
+                "image/jpeg"
+            );
 
 
         imageUrls.push(url);
+
     }
 
 
     return imageUrls;
+
 }
 
 
-// ===============================
-// HÀM UPLOAD VIDEO
-// ===============================
+// ======================================
+// UPLOAD VIDEO
+// ======================================
 
-async function uploadProductVideo(productId) {
+async function uploadProductVideo(
+    productId
+) {
 
     if (!selectedVideo) {
+
         return "";
+
     }
+
+
+    const file =
+        selectedVideo;
+
+
+    // -------------------------
+    // GIỚI HẠN VIDEO
+    // -------------------------
+
+    const MAX_VIDEO_SIZE =
+        100 * 1024 * 1024;
+
+
+    if (
+        file.size >
+        MAX_VIDEO_SIZE
+    ) {
+
+        throw new Error(
+            "Video quá lớn. Vui lòng chọn video dưới 100MB."
+        );
+
+    }
+
+
+    const extension =
+        file.name
+            .split(".")
+            .pop()
+            .toLowerCase();
 
 
     const fileName =
         Date.now() +
-        "_" +
-        selectedVideo.name;
+        "_video." +
+        extension;
 
 
     const videoRef =
@@ -1240,269 +1528,386 @@ async function uploadProductVideo(productId) {
         );
 
 
-    await uploadBytes(
-        videoRef,
-        selectedVideo
-    );
+    productMessage.textContent =
+        "⏳ Đang tải video 0%...";
 
 
     const url =
-        await getDownloadURL(videoRef);
+        await uploadFileWithProgress(
+            file,
+            videoRef,
+            productMessage,
+            "⏳ Đang tải video",
+            file.type || "video/mp4"
+        );
 
 
     return url;
+
 }
 
-// ===============================
+
+// ======================================
 // THÊM SẢN PHẨM
-// ===============================
+// ======================================
 
-addProductButton.addEventListener("click", async () => {
+addProductButton.addEventListener(
+    "click",
+    async () => {
 
-    const name =
-        document.getElementById("productName").value.trim();
-
-    const price =
-        Number(
-            document.getElementById("productPrice").value
-        );
-
-    const category =
-        document.getElementById("productCategory").value.trim();
-
-    const stock =
-        Number(
-            document.getElementById("productStock").value
-        );
-
-    const description =
-        document.getElementById("productDescription").value.trim();
+        const name =
+            document
+                .getElementById("productName")
+                .value
+                .trim();
 
 
-    // ===============================
-    // KIỂM TRA DỮ LIỆU
-    // ===============================
-
-    if (!name) {
-
-        productMessage.textContent =
-            "⚠️ Vui lòng nhập tên sản phẩm.";
-
-        return;
-    }
-
-
-    if (!Number.isFinite(price) || price < 0) {
-
-        productMessage.textContent =
-            "⚠️ Giá sản phẩm không hợp lệ.";
-
-        return;
-    }
-
-
-    if (!category) {
-
-        productMessage.textContent =
-            "⚠️ Vui lòng nhập danh mục.";
-
-        return;
-    }
-
-
-    if (!Number.isInteger(stock) || stock < 0) {
-
-        productMessage.textContent =
-            "⚠️ Số lượng tồn kho không hợp lệ.";
-
-        return;
-    }
-
-
-    // ===============================
-    // KIỂM TRA ẢNH
-    // ===============================
-
-    if (selectedImages.length > 7) {
-
-        productMessage.textContent =
-            "⚠️ Mỗi sản phẩm chỉ được tối đa 7 ảnh.";
-
-        return;
-    }
-
-
-    try {
-
-        addProductButton.disabled = true;
-
-        addProductButton.textContent =
-            "ĐANG TẢI LÊN...";
-
-
-        productMessage.textContent =
-            "⏳ Đang tạo sản phẩm...";
-
-
-        // ===============================
-        // TẠO ID SẢN PHẨM
-        // ===============================
-
-        const newProductRef =
-            push(
-                ref(database, "products")
+        const price =
+            Number(
+                document
+                    .getElementById("productPrice")
+                    .value
             );
 
-        const productId =
-            newProductRef.key;
+
+        const category =
+            document
+                .getElementById("productCategory")
+                .value
+                .trim();
 
 
-        // ===============================
-        // UPLOAD ẢNH
-        // ===============================
-
-        productMessage.textContent =
-            "⏳ Đang tải ảnh lên...";
-
-
-        const imageUrls =
-            await uploadProductImages(productId);
+        const stock =
+            Number(
+                document
+                    .getElementById("productStock")
+                    .value
+            );
 
 
-        // ===============================
-        // UPLOAD VIDEO
-        // ===============================
-
-        productMessage.textContent =
-            "⏳ Đang tải video lên...";
-
-
-        const videoUrl =
-            await uploadProductVideo(productId);
+        const description =
+            document
+                .getElementById("productDescription")
+                .value
+                .trim();
 
 
-        // ===============================
-        // TẠO DỮ LIỆU SẢN PHẨM
-        // ===============================
+        // ==================================
+        // KIỂM TRA
+        // ==================================
 
-        const product = {
+        if (!name) {
 
-            name: name,
+            productMessage.textContent =
+                "⚠️ Vui lòng nhập tên sản phẩm.";
 
-            price: price,
+            return;
 
-            category: category,
-
-            stock: stock,
-
-            description: description,
-
-            images: imageUrls,
-
-            image:
-                imageUrls.length > 0
-                    ? imageUrls[0]
-                    : "",
-
-            video: videoUrl,
-
-            createdAt: Date.now()
-
-        };
+        }
 
 
-        // ===============================
-        // LƯU FIREBASE DATABASE
-        // ===============================
+        if (
+            !Number.isFinite(price) ||
+            price < 0
+        ) {
 
-        productMessage.textContent =
-            "⏳ Đang lưu sản phẩm...";
+            productMessage.textContent =
+                "⚠️ Giá sản phẩm không hợp lệ.";
 
+            return;
 
-        await set(
-            newProductRef,
-            product
-        );
-
-
-        // ===============================
-        // THÀNH CÔNG
-        // ===============================
-
-        productMessage.textContent =
-            "✅ Thêm sản phẩm thành công!";
+        }
 
 
-        // ===============================
-        // XÓA FORM
-        // ===============================
+        if (!category) {
 
-        document.getElementById("productName").value =
-            "";
+            productMessage.textContent =
+                "⚠️ Vui lòng nhập danh mục.";
 
-        document.getElementById("productPrice").value =
-            "";
+            return;
 
-        document.getElementById("productCategory").value =
-            "";
-
-        document.getElementById("productStock").value =
-            "";
-
-        document.getElementById("productDescription").value =
-            "";
+        }
 
 
-        // Xóa ảnh đã chọn
+        if (
+            !Number.isInteger(stock) ||
+            stock < 0
+        ) {
 
-        selectedImages = [];
+            productMessage.textContent =
+                "⚠️ Số lượng tồn kho không hợp lệ.";
 
-        imageInput.value = "";
+            return;
 
-        renderImagePreview();
-
-
-        // Xóa video đã chọn
-
-        selectedVideo = null;
-
-        videoInput.value = "";
-
-        renderVideoPreview();
+        }
 
 
-        // ===============================
-        // TẢI LẠI DANH SÁCH
-        // ===============================
+        if (
+            selectedImages.length > 7
+        ) {
 
-        await loadAdminProducts();
+            productMessage.textContent =
+                "⚠️ Mỗi sản phẩm chỉ được tối đa 7 ảnh.";
 
-        await loadDashboard();
+            return;
 
-
-    } catch (error) {
-
-        console.error(
-            "Lỗi thêm sản phẩm:",
-            error
-        );
+        }
 
 
-        productMessage.textContent =
-            "❌ Không thể thêm sản phẩm: " +
-            error.message;
+        try {
+
+            addProductButton.disabled =
+                true;
 
 
-    } finally {
+            addProductButton.textContent =
+                "ĐANG TẢI LÊN...";
 
-        addProductButton.disabled = false;
 
-        addProductButton.textContent =
-            "➕ THÊM SẢN PHẨM";
+            // ==================================
+            // TẠO ID
+            // ==================================
+
+            productMessage.textContent =
+                "⏳ Đang tạo sản phẩm...";
+
+
+            const newProductRef =
+                push(
+                    ref(
+                        database,
+                        "products"
+                    )
+                );
+
+
+            const productId =
+                newProductRef.key;
+
+
+            if (!productId) {
+
+                throw new Error(
+                    "Không tạo được ID sản phẩm."
+                );
+
+            }
+
+
+            // ==================================
+            // UPLOAD ẢNH
+            // ==================================
+
+            const imageUrls =
+                await uploadProductImages(
+                    productId
+                );
+
+
+            // ==================================
+            // UPLOAD VIDEO
+            // ==================================
+
+            productMessage.textContent =
+                "⏳ Chuẩn bị tải video...";
+
+
+            const videoUrl =
+                await uploadProductVideo(
+                    productId
+                );
+
+
+            // ==================================
+            // TẠO PRODUCT
+            // ==================================
+
+            const product = {
+
+                name:
+                    name,
+
+                price:
+                    price,
+
+                category:
+                    category,
+
+                stock:
+                    stock,
+
+                description:
+                    description,
+
+                images:
+                    imageUrls,
+
+                image:
+                    imageUrls.length > 0
+                        ? imageUrls[0]
+                        : "",
+
+                video:
+                    videoUrl,
+
+                createdAt:
+                    Date.now()
+
+            };
+
+
+            // ==================================
+            // LƯU DATABASE
+            // ==================================
+
+            productMessage.textContent =
+                "⏳ Đang lưu sản phẩm...";
+
+
+            await set(
+                newProductRef,
+                product
+            );
+
+
+            // ==================================
+            // THÀNH CÔNG
+            // ==================================
+
+            productMessage.textContent =
+                "✅ Thêm sản phẩm thành công!";
+
+
+            // ==================================
+            // XÓA FORM
+            // ==================================
+
+            document
+                .getElementById("productName")
+                .value = "";
+
+
+            document
+                .getElementById("productPrice")
+                .value = "";
+
+
+            document
+                .getElementById("productCategory")
+                .value = "";
+
+
+            document
+                .getElementById("productStock")
+                .value = "";
+
+
+            document
+                .getElementById("productDescription")
+                .value = "";
+
+
+            // ==================================
+            // XÓA ẢNH
+            // ==================================
+
+            selectedImages = [];
+
+            imageInput.value = "";
+
+            renderImagePreview();
+
+
+            // ==================================
+            // XÓA VIDEO
+            // ==================================
+
+            selectedVideo = null;
+
+            videoInput.value = "";
+
+            renderVideoPreview();
+
+
+            // ==================================
+            // CẬP NHẬT ADMIN
+            // ==================================
+
+            await loadAdminProducts();
+
+            await loadDashboard();
+
+
+        } catch (error) {
+
+            console.error(
+                "❌ LỖI THÊM SẢN PHẨM:",
+                error
+            );
+
+
+            let message =
+                error?.message ||
+                "Lỗi không xác định";
+
+
+            // -------------------------------
+            // LỖI STORAGE
+            // -------------------------------
+
+            if (
+                error?.code ===
+                "storage/retry-limit-exceeded"
+            ) {
+
+                message =
+                    "Firebase Storage không kết nối được. " +
+                    "Hãy kiểm tra mạng hoặc Firebase Storage Rules.";
+
+            }
+
+
+            if (
+                error?.code ===
+                "storage/unauthorized"
+            ) {
+
+                message =
+                    "Firebase Storage từ chối quyền upload. " +
+                    "Hãy kiểm tra Storage Rules.";
+
+            }
+
+
+            if (
+                error?.code ===
+                "storage/canceled"
+            ) {
+
+                message =
+                    "Upload đã bị hủy.";
+
+            }
+
+
+            productMessage.textContent =
+                "❌ Không thể thêm sản phẩm: " +
+                message;
+
+
+        } finally {
+
+            addProductButton.disabled =
+                false;
+
+
+            addProductButton.textContent =
+                "➕ THÊM SẢN PHẨM";
+
+        }
 
     }
-
-});
+);
     
 // ===============================
 // DANH SÁCH SẢN PHẨM ADMIN
