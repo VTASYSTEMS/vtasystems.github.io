@@ -668,11 +668,7 @@ text-align:left;
 // FIREBASE
 // =====================================================
 
-import {
-    auth,
-    database,
-    storage
-} from "./firebase.js";
+import { auth, database, storage } from "./firebase.js";
 
 import {
     onAuthStateChanged,
@@ -689,14 +685,13 @@ import {
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
 import {
-    ref as storageRef,
     uploadBytesResumable,
     getDownloadURL,
     deleteObject,
+    ref as storageRef,
     setMaxUploadRetryTime,
     setMaxOperationRetryTime
 } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js";
-
 
 // =====================================================
 // ADMIN DUY NHẤT
