@@ -2077,59 +2077,6 @@ editProductImages.addEventListener(
         editProductDescription.value =
             product.description || "";
 
-// ======================================
-// NẠP ẢNH CŨ
-// ======================================
-
-editExistingImages =
-    Array.isArray(product.images)
-        ? [...product.images]
-        : (
-            product.image
-                ? [product.image]
-                : []
-        );
-
-
-// ======================================
-// RESET ẢNH / VIDEO ĐANG CHỈNH SỬA
-// ======================================
-
-editNewImages = [];
-
-editDeletedImages = [];
-
-editNewVideo = null;
-
-editDeletedVideo = false;
-
-
-// ======================================
-// NẠP VIDEO CŨ
-// ======================================
-
-editExistingVideo =
-    product.video || "";
-
-
-// ======================================
-// XÓA FILE ĐANG CHỌN TRONG INPUT
-// ======================================
-
-editProductImages.value = "";
-
-editProductVideo.value = "";
-
-
-// ======================================
-// HIỂN THỊ MEDIA
-// ======================================
-
-renderEditImages();
-
-renderEditVideo();
-        
-
         // ===============================
         // RESET MEDIA
         // ===============================
