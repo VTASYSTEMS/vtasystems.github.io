@@ -470,6 +470,59 @@ text-align:left;
         placeholder="Mô tả sản phẩm..."
     ></textarea>
 
+    <!-- =============================== -->
+<!-- ẢNH SẢN PHẨM KHI SỬA -->
+<!-- =============================== -->
+
+<div class="media-section">
+
+    <h3>🖼️ Ảnh sản phẩm</h3>
+
+    <p class="media-note">
+        Có thể giữ ảnh cũ, xóa ảnh cũ hoặc thêm ảnh mới.
+        Tối đa 7 ảnh.
+    </p>
+
+    <input
+        type="file"
+        id="editProductImages"
+        accept="image/*"
+        multiple
+    >
+
+    <div
+        id="editImagePreview"
+        class="image-preview"
+    ></div>
+
+</div>
+
+
+<!-- =============================== -->
+<!-- VIDEO SẢN PHẨM KHI SỬA -->
+<!-- =============================== -->
+
+<div class="media-section">
+
+    <h3>🎥 Video sản phẩm</h3>
+
+    <p class="media-note">
+        Có thể giữ video cũ, xóa video cũ hoặc thay bằng video mới.
+        Tối đa 1 video.
+    </p>
+
+    <input
+        type="file"
+        id="editProductVideo"
+        accept="video/*"
+    >
+
+    <div
+        id="editVideoPreview"
+        class="video-preview"
+    ></div>
+
+</div>
 
     <button id="saveEditProduct">
         💾 LƯU THAY ĐỔI
