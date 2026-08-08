@@ -2018,11 +2018,8 @@ editProductImages.addEventListener(
     }
 );
     
-// ===============================
-// BẤM NÚT SỬA
-// ===============================
 
-adminProductList.addEventListener("click", async (event) => {
+    adminProductList.addEventListener("click", async (event) => {
 
     const editButton =
         event.target.closest(".edit-product");
@@ -2031,15 +2028,12 @@ adminProductList.addEventListener("click", async (event) => {
         return;
     }
 
-
     const productId =
         editButton.dataset.id;
-
 
     if (!productId) {
         return;
     }
-
 
     try {
 
@@ -2051,22 +2045,19 @@ adminProductList.addEventListener("click", async (event) => {
                 )
             );
 
-
         if (!snapshot.exists()) {
 
-            alert(
-                "❌ Không tìm thấy sản phẩm."
-            );
+            alert("❌ Không tìm thấy sản phẩm.");
 
             return;
         }
 
-
         const product =
             snapshot.val();
 
-
-        // Đưa dữ liệu vào form
+        // ===============================
+        // THÔNG TIN CƠ BẢN
+        // ===============================
 
         editProductId.value =
             productId;
@@ -2087,23 +2078,56 @@ adminProductList.addEventListener("click", async (event) => {
             product.description || "";
 
 
-        // Hiện khu vực sửa
+        // ===============================
+        // RESET MEDIA
+        // ===============================
+
+        editExistingImages = Array.isArray(product.images)
+            ? [...product.images]
+            : (
+                product.image
+                    ? [product.image]
+                    : []
+            );
+
+        editNewImages = [];
+
+        editDeletedImages = [];
+
+        editExistingVideo =
+            product.video || "";
+
+        editNewVideo = null;
+
+        editDeletedVideo = false;
+
+        editProductImages.value = "";
+
+        editProductVideo.value = "";
+
+
+        // ===============================
+        // HIỂN THỊ MEDIA
+        // ===============================
+
+        renderEditImages();
+
+        renderEditVideo();
+
+
+        // ===============================
+        // HIỆN FORM
+        // ===============================
 
         editProductSection.style.display =
             "block";
-
-
-        // Cuộn tới form
 
         editProductSection.scrollIntoView({
             behavior: "smooth",
             block: "start"
         });
 
-
-        editProductMessage.textContent =
-            "";
-
+        editProductMessage.textContent = "";
 
     } catch (error) {
 
