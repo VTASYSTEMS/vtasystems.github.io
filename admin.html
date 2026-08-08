@@ -543,6 +543,54 @@ text-align:left;
     ></textarea>
 
 <!-- =============================== -->
+<!-- MEDIA SẢN PHẨM KHI CHỈNH SỬA -->
+<!-- =============================== -->
+
+<div class="media-section">
+
+    <h3>🖼️ Ảnh sản phẩm</h3>
+
+    <p class="media-note">
+        Có thể có tối đa 7 ảnh. Bạn có thể xóa ảnh cũ hoặc thêm ảnh mới.
+    </p>
+
+    <div
+        id="editImagePreview"
+        class="image-preview"
+    ></div>
+
+    <input
+        type="file"
+        id="editProductImages"
+        accept="image/*"
+        multiple
+    >
+
+</div>
+
+
+<div class="media-section">
+
+    <h3>🎥 Video sản phẩm</h3>
+
+    <p class="media-note">
+        Mỗi sản phẩm chỉ có tối đa 1 video.
+    </p>
+
+    <div
+        id="editVideoPreview"
+        class="video-preview"
+    ></div>
+
+    <input
+        type="file"
+        id="editProductVideo"
+        accept="video/*"
+    >
+
+</div>
+    
+<!-- =============================== -->
 <!-- ẢNH SẢN PHẨM -->
 <!-- =============================== -->
 
@@ -1705,7 +1753,360 @@ const cancelEditProduct =
 const editProductMessage =
     document.getElementById("editProductMessage");
 
+// ===============================
+// MEDIA KHI SỬA SẢN PHẨM
+// ===============================
 
+const editImagePreview =
+    document.getElementById("editImagePreview");
+
+const editVideoPreview =
+    document.getElementById("editVideoPreview");
+
+const editProductImages =
+    document.getElementById("editProductImages");
+
+const editProductVideo =
+    document.getElementById("editProductVideo");
+
+
+// Ảnh cũ đang giữ lại
+let editExistingImages = [];
+
+
+// Ảnh mới được chọn
+let editNewImages = [];
+
+
+// Video cũ
+let editExistingVideo = "";
+
+
+// Video mới
+let editNewVideo = null;
+
+
+// Các URL ảnh cũ bị xóa
+let editDeletedImages = [];
+
+
+// Video cũ có bị xóa không
+let editDeletedVideo = false;    
+
+// ===============================
+// HIỂN THỊ ẢNH KHI SỬA
+// ===============================
+
+function renderEditImages() {
+
+    editImagePreview.innerHTML = "";
+
+
+    // ---------------------------
+    // ẢNH CŨ
+    // ---------------------------
+
+    editExistingImages.forEach(
+        (url, index) => {
+
+            const wrapper =
+                document.createElement("div");
+
+            wrapper.className =
+                "image-preview-item";
+
+
+            const img =
+                document.createElement("img");
+
+            img.src = url;
+
+
+            const removeButton =
+                document.createElement("button");
+
+            removeButton.type =
+                "button";
+
+            removeButton.className =
+                "image-remove";
+
+            removeButton.textContent =
+                "×";
+
+
+            removeButton.onclick = () => {
+
+                editDeletedImages.push(url);
+
+                editExistingImages.splice(
+                    index,
+                    1
+                );
+
+                renderEditImages();
+
+            };
+
+
+            wrapper.appendChild(img);
+
+            wrapper.appendChild(removeButton);
+
+            editImagePreview.appendChild(wrapper);
+
+        }
+    );
+
+
+    
+
+    // ---------------------------
+    // ẢNH MỚI
+    // ---------------------------
+
+    editNewImages.forEach(
+        (file, index) => {
+
+            const wrapper =
+                document.createElement("div");
+
+            wrapper.className =
+                "image-preview-item";
+
+
+            const img =
+                document.createElement("img");
+
+            img.src =
+                URL.createObjectURL(file);
+
+
+            const removeButton =
+                document.createElement("button");
+
+            removeButton.type =
+                "button";
+
+            removeButton.className =
+                "image-remove";
+
+            removeButton.textContent =
+                "×";
+
+
+            removeButton.onclick = () => {
+
+                editNewImages.splice(
+                    index,
+                    1
+                );
+
+                renderEditImages();
+
+            };
+
+
+            wrapper.appendChild(img);
+
+            wrapper.appendChild(removeButton);
+
+            editImagePreview.appendChild(wrapper);
+
+        }
+    );
+
+}
+
+// ===============================
+// CHỌN VIDEO MỚI KHI SỬA
+// ===============================
+
+editProductVideo.addEventListener(
+    "change",
+    () => {
+
+        const file =
+            editProductVideo.files[0];
+
+
+        if (!file) {
+            return;
+        }
+
+
+        editNewVideo =
+            file;
+
+
+        editDeletedVideo =
+            false;
+
+
+        renderEditVideo();
+
+    }
+);
+
+// ===============================
+// HIỂN THỊ VIDEO KHI SỬA
+// ===============================
+
+function renderEditVideo() {
+
+    editVideoPreview.innerHTML = "";
+
+
+    // ---------------------------
+    // VIDEO MỚI
+    // ---------------------------
+
+    if (editNewVideo) {
+
+        const video =
+            document.createElement("video");
+
+        video.controls = true;
+
+        video.src =
+            URL.createObjectURL(
+                editNewVideo
+            );
+
+
+        const removeButton =
+            document.createElement("button");
+
+        removeButton.type =
+            "button";
+
+        removeButton.className =
+            "video-remove";
+
+        removeButton.textContent =
+            "🗑️ Xóa video mới";
+
+
+        removeButton.onclick = () => {
+
+            editNewVideo =
+                null;
+
+            editProductVideo.value =
+                "";
+
+            renderEditVideo();
+
+        };
+
+
+        editVideoPreview.appendChild(
+            video
+        );
+
+        editVideoPreview.appendChild(
+            removeButton
+        );
+
+        return;
+    }
+
+
+    // ---------------------------
+    // VIDEO CŨ
+    // ---------------------------
+
+    if (editExistingVideo) {
+
+        const video =
+            document.createElement("video");
+
+        video.controls = true;
+
+        video.src =
+            editExistingVideo;
+
+
+        const removeButton =
+            document.createElement("button");
+
+        removeButton.type =
+            "button";
+
+        removeButton.className =
+            "video-remove";
+
+        removeButton.textContent =
+            "🗑️ Xóa video";
+
+
+        removeButton.onclick = () => {
+
+            editExistingVideo =
+                "";
+
+            editDeletedVideo =
+                true;
+
+            renderEditVideo();
+
+        };
+
+
+        editVideoPreview.appendChild(
+            video
+        );
+
+        editVideoPreview.appendChild(
+            removeButton
+        );
+
+    }
+
+}
+
+
+    
+// ===============================
+// CHỌN ẢNH MỚI KHI SỬA
+// ===============================
+
+editProductImages.addEventListener(
+    "change",
+    () => {
+
+        const files =
+            Array.from(editProductImages.files);
+
+
+        const currentCount =
+            editExistingImages.length +
+            editNewImages.length;
+
+
+        if (
+            currentCount + files.length > 7
+        ) {
+
+            alert(
+                "⚠️ Mỗi sản phẩm chỉ được tối đa 7 ảnh."
+            );
+
+            editProductImages.value = "";
+
+            return;
+        }
+
+
+        editNewImages =
+            editNewImages.concat(files);
+
+
+        renderEditImages();
+
+    }
+);
+    
 // ===============================
 // BẤM NÚT SỬA
 // ===============================
