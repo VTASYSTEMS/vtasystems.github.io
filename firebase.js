@@ -2,7 +2,9 @@
 // VTA SYSTEMS - FIREBASE CONFIG
 // ======================================================
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import {
+    initializeApp
+} from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 
 import {
     getAuth
@@ -24,7 +26,7 @@ import {
 const firebaseConfig = {
 
     apiKey:
-        "AIzaSyBv_F507Y_8X3yo-Nc1yIqYPY6O7TESc",
+        "AIzaSyBv_F507Y_8X3yo-Nc1yIqKeYPY607TESc",
 
     authDomain:
         "vta-systems.firebaseapp.com",
@@ -42,8 +44,10 @@ const firebaseConfig = {
         "597894554622",
 
     appId:
-        "1:597894554622:web:3fc5ab6c87ad5de68c16af"
+        "1:597894554622:web:3fc5ab6c87ad5de68c16af",
 
+    measurementId:
+        "G-V0BE8E0374"
 };
 
 
@@ -51,32 +55,28 @@ const firebaseConfig = {
 // KHỞI TẠO FIREBASE
 // ======================================================
 
-const app =
-    initializeApp(firebaseConfig);
+const app = initializeApp(firebaseConfig);
 
 
 // ======================================================
-// FIREBASE AUTHENTICATION
+// FIREBASE AUTH
 // ======================================================
 
-export const auth =
-    getAuth(app);
+export const auth = getAuth(app);
 
 
 // ======================================================
 // FIREBASE REALTIME DATABASE
 // ======================================================
 
-export const database =
-    getDatabase(app);
+export const database = getDatabase(app);
 
 
 // ======================================================
 // FIREBASE STORAGE
 // ======================================================
 
-export const storage =
-    getStorage(app);
+export const storage = getStorage(app);
 
 
 // ======================================================
